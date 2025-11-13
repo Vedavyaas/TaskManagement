@@ -87,5 +87,5 @@ public class UserEntity {
 
     public void setTasksCreated(List<TaskEntity> tasksCreated) {
         this.tasksCreated = tasksCreated;
-    }//getters and setters
+    }
 }

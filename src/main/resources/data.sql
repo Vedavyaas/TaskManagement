@@ -1,11 +1,11 @@
 -- === Insert Users First ===
 INSERT INTO user_entity (id, username, password, email, role, full_name, created_at)
 VALUES
-    (1, 'admin', 'admin123', 'admin@amdox.com', 'ADMIN', 'System Admin', CURRENT_TIMESTAMP()),
-    (2, 'john', 'john123', 'john@amdox.com', 'USER', 'John Doe', CURRENT_TIMESTAMP()),
-    (3, 'emma', 'emma123', 'emma@amdox.com', 'USER', 'Emma Watson', CURRENT_TIMESTAMP()),
-    (4, 'liam', 'liam123', 'liam@amdox.com', 'USER', 'Liam Brown', CURRENT_TIMESTAMP());
-
+    (1, 'admin', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'admin@amdox.com', 'ADMIN', 'System Admin', CURRENT_TIMESTAMP()),
+    (2, 'john', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'john@amdox.com', 'USER', 'John Doe', CURRENT_TIMESTAMP()),
+    (3, 'emma', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'emma@amdox.com', 'USER', 'Emma Watson', CURRENT_TIMESTAMP()),
+    (4, 'liam', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'liam@amdox.com', 'USER', 'Liam Brown', CURRENT_TIMESTAMP());
+-- username+123 is the password(hashed)
 -- === Then Insert Tasks ===
 INSERT INTO task_entity (id, title, description, status, created_at, updated_at, completed_at, assigned_user_id, created_by_id)
 VALUES

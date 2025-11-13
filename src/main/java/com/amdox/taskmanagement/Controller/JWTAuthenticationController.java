@@ -1,11 +1,15 @@
 package com.amdox.taskmanagement.Controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
@@ -15,14 +19,20 @@ import java.util.stream.Collectors;
 public class JWTAuthenticationController {
 
     private final JwtEncoder jwtEncoder;
+    private final AuthenticationManager authenticationManager;
 
-    public JWTAuthenticationController(JwtEncoder jwtEncoder) {
+    public JWTAuthenticationController(JwtEncoder jwtEncoder, AuthenticationManager authenticationManager) {
         this.jwtEncoder = jwtEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/authenticate")
-    JWTResponse authentication(Authentication authentication) {
-        return new JWTResponse(createToken(authentication));
+    ResponseEntity<JWTResponse> authenticate(@RequestBody LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password())
+        );
+        String token = createToken(authentication);
+        return ResponseEntity.ok(new JWTResponse(token));
     }
 
     private String createToken(Authentication authentication) {
@@ -43,3 +53,5 @@ public class JWTAuthenticationController {
 }
 
 record JWTResponse(String token) {}
+
+record LoginRequest(String username, String password) {}
