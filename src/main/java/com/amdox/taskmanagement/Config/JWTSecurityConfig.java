@@ -35,8 +35,7 @@ public class JWTSecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/authenticate").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/authenticate/**", "/create/**", "/verify/**", "/generate/otp/**", "/reset/password/**", "/h2-console/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .csrf(AbstractHttpConfigurer::disable)

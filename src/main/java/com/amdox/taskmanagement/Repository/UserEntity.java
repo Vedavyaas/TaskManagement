@@ -1,5 +1,6 @@
 package com.amdox.taskmanagement.Repository;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,15 @@ public class UserEntity {
     private List<TaskEntity> tasksCreated;
 
     public UserEntity() { }
+
+    public UserEntity(String username, String password, String email, String s, String user, LocalDateTime now) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = s;
+        this.fullName = user;
+        this.createdAt = now;
+    }
 
     public String getUsername() {
         return username;
