@@ -1,10 +1,18 @@
 -- === Insert Users First ===
-INSERT INTO user_entity (id, username, password, email, role, full_name, created_at)
-VALUES
-    (1, 'admin', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'admin@amdox.com', 'ADMIN', 'System Admin', CURRENT_TIMESTAMP()),
-    (2, 'john', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'john@amdox.com', 'USER', 'John Doe', CURRENT_TIMESTAMP()),
-    (3, 'emma', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'emma@amdox.com', 'USER', 'Emma Watson', CURRENT_TIMESTAMP()),
-    (4, 'liam', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'liam@amdox.com', 'USER', 'Liam Brown', CURRENT_TIMESTAMP());
+INSERT INTO user_entity (id, username, password, email, role, full_name, organization, domain, company_name, created_at) VALUES (1, 'admin', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'admin@amdox.com', 'ADMIN', 'System Admin', 'AMDox', 'IT', 'AMDox Corp', CURRENT_TIMESTAMP());
+INSERT INTO user_entity (id, username, password, email, role, full_name, organization, domain, company_name, created_at) VALUES (2, 'john', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'john@amdox.com', 'USER', 'John Doe', 'Engineering', 'Software', 'Tech Solutions Inc', CURRENT_TIMESTAMP());
+INSERT INTO user_entity (id, username, password, email, role, full_name, organization, domain, company_name, created_at) VALUES (3, 'emma', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'emma@amdox.com', 'USER', 'Emma Watson', 'Marketing', 'Digital', 'Global Marketing Ltd', CURRENT_TIMESTAMP());
+INSERT INTO user_entity (id, username, password, email, role, full_name, organization, domain, company_name, created_at) VALUES (4, 'liam', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'liam@amdox.com', 'USER', 'Liam Brown', 'HR', 'Operations', 'People First Corp', CURRENT_TIMESTAMP());
+INSERT INTO user_entity (id, username, password, email, role, full_name, organization, domain, company_name, created_at) VALUES (5, 'sophia', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'sophia@amdox.com', 'USER', 'Sophia Garcia', 'Finance', 'Accounting', 'Finance Experts LLC', CURRENT_TIMESTAMP());
+INSERT INTO user_entity (id, username, password, email, role, full_name, organization, domain, company_name, created_at) VALUES (6, 'noah', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'noah@amdox.com', 'USER', 'Noah Miller', 'Sales', 'Business', 'Sales Pro Inc', CURRENT_TIMESTAMP());
+INSERT INTO user_entity (id, username, password, email, role, full_name, organization, domain, company_name, created_at) VALUES (7, 'olivia', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'olivia@amdox.com', 'USER', 'Olivia Davis', 'Support', 'Customer', 'Help Desk Co', CURRENT_TIMESTAMP());
+INSERT INTO user_entity (id, username, password, email, role, full_name, organization, domain, company_name, created_at) VALUES (8, 'mason', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'mason@amdox.com', 'USER', 'Mason Wilson', 'R&D', 'Research', 'Innovate Labs', CURRENT_TIMESTAMP());
+INSERT INTO user_entity (id, username, password, email, role, full_name, organization, domain, company_name, created_at) VALUES (9, 'ava', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'ava@amdox.com', 'USER', 'Ava Martinez', 'Legal', 'Compliance', 'Legal Advisors Inc', CURRENT_TIMESTAMP());
+INSERT INTO user_entity (id, username, password, email, role, full_name, organization, domain, company_name, created_at) VALUES (10, 'ethan', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'ethan@amdox.com', 'USER', 'Ethan Anderson', 'Operations', 'Logistics', 'Ops Masters Ltd', CURRENT_TIMESTAMP());
+INSERT INTO user_entity (id, username, password, email, role, full_name, organization, domain, company_name, created_at) VALUES (11, 'admin2', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'admin2@amdox.com', 'ADMIN', 'Admin Two', 'AMDox', 'IT', 'AMDox Corp', CURRENT_TIMESTAMP());
+INSERT INTO user_entity (id, username, password, email, role, full_name, organization, domain, company_name, created_at) VALUES (12, 'admin3', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'admin3@amdox.com', 'ADMIN', 'Admin Three', 'AMDox', 'IT', 'AMDox Corp', CURRENT_TIMESTAMP());
+INSERT INTO user_entity (id, username, password, email, role, full_name, organization, domain, company_name, created_at) VALUES (13, 'admin4', '$2a$10$ZsmpxUN3qGjWI2oDEhvrHOnBaF9kM4QK1WeoUxXuWVwjYKyHoPSMi', 'admin4@amdox.com', 'ADMIN', 'Admin Four', 'AMDox', 'IT', 'AMDox Corp', CURRENT_TIMESTAMP());
+ALTER SEQUENCE USER_ENTITY_SEQ RESTART WITH 14;
 -- username+123 is the password(hashed)
 -- === Then Insert Tasks ===
 INSERT INTO task_entity (id, title, description, status, created_at, updated_at, completed_at, assigned_user_id, created_by_id)

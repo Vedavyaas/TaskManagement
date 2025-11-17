@@ -3,6 +3,7 @@ package com.amdox.taskmanagement.Repository;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,9 @@ public class UserEntity {
     private String email;
     private String role;
     private String fullName;
+    private String organization;
+    private String domain;
+    private String companyName;
     private LocalDateTime createdAt;
     @OneToMany(mappedBy = "assignedUser")
     private List<TaskEntity> tasksAssigned;
@@ -24,6 +28,20 @@ public class UserEntity {
     private List<TaskEntity> tasksCreated;
 
     public UserEntity() { }
+
+    public UserEntity(String username, String password, String email, String role, String fullName, String organization, String domain, String companyName) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.fullName = fullName;
+        this.organization = organization;
+        this.domain = domain;
+        this.companyName = companyName;
+        this.createdAt = LocalDateTime.now();
+        this.tasksAssigned = new ArrayList<>();
+        this.tasksCreated = new ArrayList<>();
+    }
 
     public String getUsername() {
         return username;
@@ -63,6 +81,30 @@ public class UserEntity {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public LocalDateTime getCreatedAt() {
