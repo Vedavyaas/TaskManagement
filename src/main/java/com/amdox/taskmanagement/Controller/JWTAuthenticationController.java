@@ -28,30 +28,23 @@ public class JWTAuthenticationController {
 
     @PostMapping("/authenticate")
     ResponseEntity<JWTResponse> authenticate(@RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password())
-        );
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));
         String token = createToken(authentication);
         return ResponseEntity.ok(new JWTResponse(token));
     }
 
     private String createToken(Authentication authentication) {
-        var claims = JwtClaimsSet.builder().issuer("self")
-                .issuedAt(Instant.now())
-                .expiresAt(Instant.now().plusSeconds(60 * 10))
-                .subject(authentication.getName())
-                .claim("scope", createScope(authentication))
-                .build();
+        var claims = JwtClaimsSet.builder().issuer("self").issuedAt(Instant.now()).expiresAt(Instant.now().plusSeconds(60 * 10)).subject(authentication.getName()).claim("scope", createScope(authentication)).build();
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
     private String createScope(Authentication authentication) {
-        return authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(" "));
+        return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
     }
 }
 
-record JWTResponse(String token) {}
+record JWTResponse(String token) {
+}
 
-record LoginRequest(String username, String password) {}
+record LoginRequest(String username, String password) {
+}

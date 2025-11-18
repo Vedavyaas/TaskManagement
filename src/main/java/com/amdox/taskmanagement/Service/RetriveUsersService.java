@@ -21,7 +21,7 @@ public class RetriveUsersService {
         if (!userRepository.existsByEmail(userDTO.email())) {
             return Collections.emptyList();
         }
-        if((userRepository.findRoleByEmail(userDTO.email())).equals("ADMIN")) {
+        if ((userRepository.findRoleByEmail(userDTO.email())).equals("ADMIN")) {
             List<UserEntity> userEntities =
                     userRepository.findByOrganization(userDTO.organization());
             return userEntities.stream()
@@ -34,16 +34,16 @@ public class RetriveUsersService {
                             u.getCompanyName()
                     ))
                     .toList();
-        } else{
+        } else {
             return Collections.emptyList();
         }
     }
 
     public List<UserDTO> getUsersByDomain(UserDTO userDTO) {
-        if(!userRepository.existsByEmail(userDTO.email())) {
+        if (!userRepository.existsByEmail(userDTO.email())) {
             return Collections.emptyList();
         }
-        if((userRepository.findRoleByEmail(userDTO.email())).equals("ADMIN")) {
+        if ((userRepository.findRoleByEmail(userDTO.email())).equals("ADMIN")) {
             List<UserEntity> userEntities = userRepository.findByDomainAndOrganization(userDTO.domain(), userDTO.organization());
 
             return userEntities.stream()
@@ -61,10 +61,10 @@ public class RetriveUsersService {
     }
 
     public List<UserDTO> getUserByEmail(UserDTO userDTO, String email) {
-        if(!userRepository.existsByEmail(userDTO.email())) {
+        if (!userRepository.existsByEmail(userDTO.email())) {
             return Collections.emptyList();
         }
-        if((userRepository.findRoleByEmail(userDTO.email())).equals("ADMIN")) {
+        if ((userRepository.findRoleByEmail(userDTO.email())).equals("ADMIN")) {
             Optional<UserEntity> userEntities = userRepository.findByEmail(email);
             return userEntities.stream()
                     .map(u -> new UserDTO(
@@ -81,10 +81,10 @@ public class RetriveUsersService {
     }
 
     public List<UserDTO> getUsersByUsername(UserDTO userDTO, String username) {
-        if(!userRepository.existsByUsername(userDTO.username())) {
+        if (!userRepository.existsByEmail(userDTO.email())) {
             return Collections.emptyList();
         }
-        if((userRepository.findRoleByEmail(userDTO.email())).equals("ADMIN")) {
+        if ((userRepository.findRoleByEmail(userDTO.email())).equals("ADMIN")) {
             Optional<UserEntity> userEntities = userRepository.findByUsername(username);
             return userEntities.stream()
                     .map(u -> new UserDTO(
@@ -101,10 +101,10 @@ public class RetriveUsersService {
     }
 
     public List<UserDTO> getUsersByCompanyName(UserDTO userDTO, String companyName) {
-        if(!userRepository.existsByEmail(userDTO.email())) {
+        if (!userRepository.existsByEmail(userDTO.email())) {
             return Collections.emptyList();
         }
-        if((userRepository.findRoleByEmail(userDTO.email())).equals("ADMIN")) {
+        if ((userRepository.findRoleByEmail(userDTO.email())).equals("ADMIN")) {
             List<UserEntity> userEntities = userRepository.findByCompanyName(companyName);
             return userEntities.stream()
                     .map(u -> new UserDTO(

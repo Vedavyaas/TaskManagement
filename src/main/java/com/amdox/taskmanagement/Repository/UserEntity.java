@@ -27,7 +27,8 @@ public class UserEntity {
     @OneToMany(mappedBy = "createdBy")
     private List<TaskEntity> tasksCreated;
 
-    public UserEntity() { }
+    public UserEntity() {
+    }
 
     public UserEntity(String username, String password, String email, String role, String fullName, String organization, String domain, String companyName) {
         this.username = username;

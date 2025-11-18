@@ -22,7 +22,7 @@ public class ForgetPasswordController {
 
     @PutMapping("/reset/password")
     public String resetPassword(@RequestParam String email, @RequestParam String otp, @RequestParam String password) {
-        if(passwordResetService.verifyOTP(email, Long.parseLong(otp))) {
+        if (passwordResetService.verifyOTP(email, Long.parseLong(otp))) {
             return passwordResetService.resetPassword(email, password);
         }
         return "The verification code is incorrect or has expired.";

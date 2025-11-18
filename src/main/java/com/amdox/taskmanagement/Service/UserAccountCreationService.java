@@ -26,8 +26,8 @@ public class UserAccountCreationService {
 
 
     public String createAccount(NewAccount newAccount, String OTP) {
-        if(map.containsKey(newAccount.email())){
-            if(Objects.equals(map.get(newAccount.email()), Long.valueOf(OTP))){
+        if (map.containsKey(newAccount.email())) {
+            if (Objects.equals(map.get(newAccount.email()), Long.valueOf(OTP))) {
                 userRepository.save(new UserEntity(newAccount.username(),
                         passwordEncoder.encode(newAccount.password()), newAccount.email(),
                         newAccount.fullName(), "USER", newAccount.organization(),

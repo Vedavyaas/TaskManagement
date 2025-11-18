@@ -25,7 +25,8 @@ public class TaskEntity {
     @JoinColumn(name = "created_by_id")
     private UserEntity createdBy;
 
-    public TaskEntity() { }
+    public TaskEntity() {
+    }
 
     public String getTitle() {
         return title;

@@ -45,22 +45,23 @@ public class JWTSecurityConfig {
 
     @Bean
     KeyPair keyPair() throws NoSuchAlgorithmException {
-         var keyPair = KeyPairGenerator.getInstance("RSA");
-         keyPair.initialize(2048);
-         return keyPair.generateKeyPair();
+        var keyPair = KeyPairGenerator.getInstance("RSA");
+        keyPair.initialize(2048);
+        return keyPair.generateKeyPair();
     }
 
     @Bean
-    RSAPublicKey publicKey(KeyPair keyPair){
+    RSAPublicKey publicKey(KeyPair keyPair) {
         return (RSAPublicKey) keyPair.getPublic();
     }
+
     @Bean
-    RSAPrivateKey privateKey(KeyPair keyPair){
+    RSAPrivateKey privateKey(KeyPair keyPair) {
         return (RSAPrivateKey) keyPair.getPrivate();
     }
 
     @Bean
-    JwtEncoder jwtEncoder(RSAPublicKey publicKey, RSAPrivateKey privateKey){
+    JwtEncoder jwtEncoder(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
         var rsaKey = new RSAKey.Builder(publicKey)
                 .privateKey(privateKey)
                 .keyID(UUID.randomUUID().toString())
@@ -71,7 +72,7 @@ public class JWTSecurityConfig {
     }
 
     @Bean
-    JwtDecoder jwtDecoder(RSAPublicKey publicKey){
+    JwtDecoder jwtDecoder(RSAPublicKey publicKey) {
         return NimbusJwtDecoder.withPublicKey(publicKey).build();
     }
 
