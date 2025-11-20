@@ -1,5 +1,6 @@
 package com.amdox.taskmanagement.Controller;
 
+import com.amdox.taskmanagement.Assests.NewAccount;
 import com.amdox.taskmanagement.Service.UserAccountCreationService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

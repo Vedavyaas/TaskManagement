@@ -1,6 +1,6 @@
 package com.amdox.taskmanagement.Service;
 
-import com.amdox.taskmanagement.Controller.NewAccount;
+import com.amdox.taskmanagement.Assests.NewAccount;
 import com.amdox.taskmanagement.Repository.UserEntity;
 import com.amdox.taskmanagement.Repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;

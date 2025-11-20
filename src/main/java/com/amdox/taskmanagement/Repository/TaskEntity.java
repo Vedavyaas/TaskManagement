@@ -1,5 +1,7 @@
 package com.amdox.taskmanagement.Repository;
 
+import com.amdox.taskmanagement.Assests.Priority;
+import com.amdox.taskmanagement.Assests.Status;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -9,23 +11,37 @@ public class TaskEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String title;
     private String description;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime completedAt;
-
+    private LocalDateTime dueDate;
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
     @ManyToOne
     @JoinColumn(name = "assigned_user_id")
     private UserEntity assignedUser;
-
     @ManyToOne
     @JoinColumn(name = "created_by_id")
     private UserEntity createdBy;
 
     public TaskEntity() {
+    }
+
+    public TaskEntity(String title, String description, Status status, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime completedAt, LocalDateTime dueDate, Priority priority, UserEntity assignedUser, UserEntity createdBy) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.completedAt = completedAt;
+        this.dueDate = dueDate;
+        this.priority = priority;
+        this.assignedUser = assignedUser;
+        this.createdBy = createdBy;
     }
 
     public String getTitle() {
@@ -44,11 +60,11 @@ public class TaskEntity {
         this.description = description;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -90,5 +106,21 @@ public class TaskEntity {
 
     public void setCreatedBy(UserEntity createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }//getters and setters
 }

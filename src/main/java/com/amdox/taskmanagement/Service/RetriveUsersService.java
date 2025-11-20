@@ -1,6 +1,6 @@
 package com.amdox.taskmanagement.Service;
 
-import com.amdox.taskmanagement.Controller.UserDTO;
+import com.amdox.taskmanagement.Assests.UserDTO;
 import com.amdox.taskmanagement.Repository.UserEntity;
 import com.amdox.taskmanagement.Repository.UserRepository;
 import org.springframework.stereotype.Service;
