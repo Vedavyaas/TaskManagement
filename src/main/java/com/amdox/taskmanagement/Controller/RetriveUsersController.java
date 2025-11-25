@@ -2,6 +2,7 @@ package com.amdox.taskmanagement.Controller;
 
 import com.amdox.taskmanagement.Assests.UserDTO;
 import com.amdox.taskmanagement.Service.RetriveUsersService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,28 +19,33 @@ public class RetriveUsersController {
     }
 
     @GetMapping("/get/organization")
-    public List<UserDTO> getAllUserByOrganization(@RequestBody UserDTO userDTO) {
-        return retriveUsersService.getUsersByOrganization(userDTO);
+    public List<UserDTO> getAllUserByOrganization() {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return retriveUsersService.getUsersByOrganization(userName);
     }
 
     @GetMapping("/get/domain")
-    public List<UserDTO> getAllUsers(@RequestBody UserDTO userDTO) {
-        return retriveUsersService.getUsersByDomain(userDTO);
+    public List<UserDTO> getAllUsers() {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return retriveUsersService.getUsersByDomain(userName);
     }
 
     @GetMapping("/get/email")
-    public List<UserDTO> getAllUsersByEmail(@RequestBody UserDTO userDTO, @RequestParam String email) {
-        return retriveUsersService.getUserByEmail(userDTO, email);
+    public List<UserDTO> getUserByEmail(@RequestParam String email) {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return retriveUsersService.getUserByEmail(userName, email);
     }
 
     @GetMapping("/get/username")
-    public List<UserDTO> getAllUsersByUsername(@RequestBody UserDTO userDTO, @RequestParam String username) {
-        return retriveUsersService.getUsersByUsername(userDTO, username);
+    public List<UserDTO> getUserByUsername(@RequestParam String username) {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return retriveUsersService.getUsersByUsername(userName, username);
     }
 
     @GetMapping("/get/companyName")
-    public List<UserDTO> getAllUsersByCompanyName(@RequestBody UserDTO userDTO, @RequestParam String companyName) {
-        return retriveUsersService.getUsersByCompanyName(userDTO, companyName);
+    public List<UserDTO> getAllUsersByCompanyName() {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return retriveUsersService.getUsersByCompanyName(userName);
     }
 
     @GetMapping("/public/email")
@@ -52,4 +58,3 @@ public class RetriveUsersController {
         return retriveUsersService.getUserByUsernamePublic(username);
     }
 }
-

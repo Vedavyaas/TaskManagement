@@ -3,6 +3,7 @@ package com.amdox.taskmanagement.Controller;
 import com.amdox.taskmanagement.Assests.TaskDisplayer;
 import com.amdox.taskmanagement.Assests.TaskEnrollment;
 import com.amdox.taskmanagement.Service.TaskEnrollService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +17,9 @@ public class TaskEnrollController {
     }
 
     @GetMapping("/task/getAll")
-    public List<TaskDisplayer> getAll(@RequestParam String email, @RequestParam String password, @RequestParam String userEmail) {
-        return taskEnrollService.getAllTasks(email, password, userEmail);
+    public List<TaskDisplayer> getAll(@RequestParam String email) {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return taskEnrollService.getAllTasks(userName, email);
     }
 
     @PostMapping("/task/create")

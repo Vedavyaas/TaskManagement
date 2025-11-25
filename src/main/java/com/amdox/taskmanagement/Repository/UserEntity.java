@@ -26,6 +26,10 @@ public class UserEntity {
     private List<TaskEntity> tasksAssigned;
     @OneToMany(mappedBy = "createdBy")
     private List<TaskEntity> tasksCreated;
+    @OneToMany(mappedBy = "issuedUser")
+    private List<IssueEntity> issuedBy;
+    @OneToMany(mappedBy = "issuedTo")
+    private List<IssueEntity> issuedTo;
 
     public UserEntity() {
     }
@@ -42,6 +46,8 @@ public class UserEntity {
         this.createdAt = LocalDateTime.now();
         this.tasksAssigned = new ArrayList<>();
         this.tasksCreated = new ArrayList<>();
+        this.issuedBy = new ArrayList<>();
+        this.issuedTo = new ArrayList<>();
     }
 
     public String getUsername() {
@@ -130,5 +136,21 @@ public class UserEntity {
 
     public void setTasksCreated(List<TaskEntity> tasksCreated) {
         this.tasksCreated = tasksCreated;
+    }
+
+    public List<IssueEntity> getIssuedBy() {
+        return issuedBy;
+    }
+
+    public void setIssuedBy(List<IssueEntity> issuedBy) {
+        this.issuedBy = issuedBy;
+    }
+
+    public List<IssueEntity> getIssuedTo() {
+        return issuedTo;
+    }
+
+    public void setIssuedTo(List<IssueEntity> issuedTo) {
+        this.issuedTo = issuedTo;
     }
 }

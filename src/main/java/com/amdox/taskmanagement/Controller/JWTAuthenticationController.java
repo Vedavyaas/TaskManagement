@@ -1,5 +1,7 @@
 package com.amdox.taskmanagement.Controller;
 
+import com.amdox.taskmanagement.Assests.JWTResponse;
+import com.amdox.taskmanagement.Assests.LoginRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,8 +45,3 @@ public class JWTAuthenticationController {
     }
 }
 
-record JWTResponse(String token) {
-}
-
-record LoginRequest(String username, String password) {
-}

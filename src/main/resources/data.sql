@@ -38,3 +38,20 @@ VALUES
     (19, 'Backup Strategy', 'Setup daily automatic database backup', 'ACTIVE', CURRENT_TIMESTAMP(), NULL, NULL, TIMESTAMPADD(DAY, 35, CURRENT_TIMESTAMP()), 'HIGH', 3, 1),
     (20, 'Final Deployment', 'Deploy the application to production environment', 'ACTIVE', CURRENT_TIMESTAMP(), NULL, NULL, TIMESTAMPADD(DAY, 40, CURRENT_TIMESTAMP()), 'HIGH', 1, 1);
 ALTER SEQUENCE TASK_ENTITY_SEQ RESTART WITH 21;
+
+-- === Insert Issues ===
+
+INSERT INTO issue_entity (id, title, description, comments, status, issued_by_id, issued_to_id, issue_token)
+VALUES
+    (1, 'Login Failure', 'User cannot login after password update', 'User tried multiple attempts', 'ACTIVE', 2, 1, 'token-001'),
+    (2, 'Email Not Sent', 'Registration email is not triggering', 'Logs need checking', 'ACTIVE', 3, 1, 'token-002'),
+    (3, 'Dashboard Error', 'Frontend crashes when loading widgets', 'Possible null pointer issue', 'ACTIVE', 4, 2, 'token-003'),
+    (4, 'API Latency', 'Task listing API takes 5 seconds to respond', 'Check DB indexes', 'ACTIVE', 5, 3, 'token-004'),
+    (5, 'Incorrect Role Mapping', 'New users default to ADMIN instead of USER', 'Urgent fix required', 'COMPLETED', 6, 1, 'token-005'),
+    (6, 'Broken Pagination', 'Next page button not working', 'Frontend routing issue', 'ACTIVE', 7, 4, 'token-006'),
+    (7, 'Search Not Working', 'Search bar always returns empty result', 'Suspected filtering logic issue', 'ACTIVE', 8, 2, 'token-007'),
+    (8, 'Incorrect Date Format', 'Task due date appears in US format', 'Format must follow ISO', 'ACTIVE', 9, 3, 'token-008'),
+    (9, 'Permission Denied', 'User cannot edit task assigned to them', 'Check access control rules', 'ACTIVE', 10, 2, 'token-009'),
+    (10, 'Session Timeout', 'Session expires in 2 minutes instead of 30', 'Token policy misconfigured', 'ACTIVE', 3, 1, 'token-010');
+
+ALTER SEQUENCE ISSUE_ENTITY_SEQ RESTART WITH 11;

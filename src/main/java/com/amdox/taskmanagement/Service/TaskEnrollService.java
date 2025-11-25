@@ -55,7 +55,7 @@ public class TaskEnrollService {
                 UserEntity admin = userEntity.get();
                 UserEntity user = userEntityAssgined.get();
                 Optional<TaskEntity> task = taskRepository.getTaskEntityByTitleAndUser(taskEnrollment.title(), admin);
-                if (!task.isPresent()) {
+                if (task.isEmpty()) {
                     return "Task not found.";
                 }
                 TaskEntity taskEntity = task.get();
@@ -73,7 +73,7 @@ public class TaskEnrollService {
             return "You dont have permission to perform this action.";
         }
         return userEntity.isPresent() ? "Assigned user email not found." : "Created user email not found.";
-    }
+    } // title cannot be changed
 
     public String deleteTask(TaskEnrollment taskEnrollment) {
         Optional<UserEntity> userEntity = userRepository.findByEmail(taskEnrollment.createdUserEmail());
@@ -91,22 +91,19 @@ public class TaskEnrollService {
         return userEntity.isPresent() ? "Email id not found." : "User id not found.";
     }
 
-    public List<TaskDisplayer> getAllTasks(String email, String password, String userEmail) {
-        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+    public List<TaskDisplayer> getAllTasks(String userName, String userEmail) {
+        Optional<UserEntity> userEntity = userRepository.findByUsername(userName);
         Optional<UserEntity> userEntityAssgined = userRepository.findByEmail(userEmail);
 
         if (userEntity.isPresent() && userEntityAssgined.isPresent()) {
             UserEntity admin = userEntity.get();
             UserEntity user = userEntityAssgined.get();
-            if (passwordEncoder.matches(password, admin.getPassword())) {
-                List<TaskEntity> tasks = taskRepository.findTaskEntityByAssignedUserAndCreatedBy(user, admin);
-                List<TaskDisplayer> taskDisplayers = new ArrayList<>();
-                for (var i : tasks) {
-                    taskDisplayers.add(new TaskDisplayer(i.getTitle(), i.getDescription(), i.getStatus(), i.getCreatedAt(), i.getUpdatedAt(), i.getCompletedAt(), i.getDueDate(), i.getPriority(), i.getAssignedUser().getEmail(), i.getCreatedBy().getEmail()));
-                }
-                return taskDisplayers;
+            List<TaskEntity> tasks = taskRepository.findTaskEntityByAssignedUserAndCreatedBy(user, admin);
+            List<TaskDisplayer> taskDisplayers = new ArrayList<>();
+            for (var i : tasks) {
+                taskDisplayers.add(new TaskDisplayer(i.getTitle(), i.getDescription(), i.getStatus(), i.getCreatedAt(), i.getUpdatedAt(), i.getCompletedAt(), i.getDueDate(), i.getPriority(), i.getAssignedUser().getEmail(), i.getCreatedBy().getEmail()));
             }
-            return null;
+            return taskDisplayers;
         }
         return null;
     }
