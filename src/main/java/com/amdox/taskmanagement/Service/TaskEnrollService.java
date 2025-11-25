@@ -1,15 +1,12 @@
 package com.amdox.taskmanagement.Service;
 
 import com.amdox.taskmanagement.Assests.Status;
-import com.amdox.taskmanagement.Assests.TaskDisplayer;
+import com.amdox.taskmanagement.Assests.TaskDTO;
 import com.amdox.taskmanagement.Assests.TaskEnrollment;
 import com.amdox.taskmanagement.Repository.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,114 +14,164 @@ import java.util.Optional;
 public class TaskEnrollService {
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public TaskEnrollService(UserRepository userRepository, TaskRepository taskRepository, PasswordEncoder passwordEncoder) {
+    public TaskEnrollService(UserRepository userRepository, TaskRepository taskRepository) {
         this.userRepository = userRepository;
         this.taskRepository = taskRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
-    @Transactional
-    public String createTask(TaskEnrollment taskEnrollment) {
+    public List<TaskDTO> getAllTasks(String admin, String username) {
+        Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
+        Optional<UserEntity> userEntity = userRepository.findByUsername(username);
+
+        if (userEntity.isPresent() && adminUser.isPresent()) {
+            if (adminUser.get().getRole().equals("ADMIN")) {
+                Optional<TaskEntity> tasks = taskRepository.findTaskEntityByAssignedUserAndCreatedBy(adminUser.get(), userEntity.get());
+                return tasks.stream().map(task -> new TaskDTO(task.getTitle(), task.getDescription(), task.getStatus(), task.getCreatedAt(), task.getUpdatedAt(), task.getCompletedAt(), task.getDueDate(), task.getPriority(), task.getCreatedBy().getUsername(), task.getAssignedUser().getUsername())).toList();
+            }
+        }
+        return null;
+    }
+
+    public List<TaskDTO> getAllTasks(String username) {
+        Optional<UserEntity> userEntity = userRepository.findByUsername(username);
+        if (userEntity.isPresent()) {
+            Optional<TaskEntity> tasks = taskRepository.findTaskEntityByAssignedUser(userEntity.get());
+            return tasks.stream().map(task -> new TaskDTO(task.getTitle(), task.getDescription(), task.getStatus(), task.getCreatedAt(), task.getUpdatedAt(), task.getCompletedAt(), task.getDueDate(), task.getPriority(), task.getCreatedBy().getUsername(), task.getAssignedUser().getUsername())).toList();
+        }
+        return null;
+    }
+
+    public String createTask(TaskEnrollment taskEnrollment, String admin) {
         if (taskRepository.existsByTitle(taskEnrollment.title())) return "Title already exists";
-        Optional<UserEntity> userEntity = userRepository.findByEmail(taskEnrollment.createdUserEmail());
-        Optional<UserEntity> userEntityAssgined = userRepository.findByEmail(taskEnrollment.assignedUserEmail());
-        if (userEntity.isPresent() && userEntityAssgined.isPresent()) {
-            if (userRepository.findRoleByEmail(userEntity.get().getEmail()).equals("ADMIN")) {
-                UserEntity admin = userEntity.get();
-                UserEntity user = userEntityAssgined.get();
+        Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
+        Optional<UserEntity> userEntity = userRepository.findByUsername(taskEnrollment.username());
+        if (userEntity.isPresent() && adminUser.isPresent()) {
+            if (adminUser.get().getRole().equals("ADMIN")) {
                 TaskEntity taskEntity = new TaskEntity(taskEnrollment.title(), taskEnrollment.description(),
                         Status.ACTIVE, LocalDateTime.now(), LocalDateTime.now(), null,
-                        taskEnrollment.dueDate(), taskEnrollment.priority(), admin, user);
+                        taskEnrollment.dueDate(), taskEnrollment.priority(), userEntity.get(), adminUser.get());
                 taskRepository.save(taskEntity);
                 return "Task created successfully!";
             }
             return "You dont have permission to perform this action.";
         }
-        return userEntity.isPresent() ? "Assigned user email not found." : "Created user email not found.";
+        return "User not found.";
     }
 
-    @Transactional
-    public String modifyTask(TaskEnrollment taskEnrollment) {
-        Optional<UserEntity> userEntity = userRepository.findByEmail(taskEnrollment.createdUserEmail());
-        Optional<UserEntity> userEntityAssgined = userRepository.findByEmail(taskEnrollment.assignedUserEmail());
-
-        if (userEntity.isPresent() && userEntityAssgined.isPresent()) {
-            if (userRepository.findRoleByEmail(userEntity.get().getEmail()).equals("ADMIN")) {
-                UserEntity admin = userEntity.get();
-                UserEntity user = userEntityAssgined.get();
-                Optional<TaskEntity> task = taskRepository.getTaskEntityByTitleAndUser(taskEnrollment.title(), admin);
-                if (task.isEmpty()) {
-                    return "Task not found.";
-                }
-                TaskEntity taskEntity = task.get();
-                taskEntity.setTitle(taskEnrollment.title());
-                taskEntity.setDescription(taskEnrollment.description());
-                taskEntity.setStatus(Status.ACTIVE);
-                taskEntity.setUpdatedAt(LocalDateTime.now());
-                taskEntity.setDueDate(taskEnrollment.dueDate());
-                taskEntity.setPriority(taskEnrollment.priority());
-                taskEntity.setCreatedBy(admin);
-                taskEntity.setAssignedUser(user);
-                taskRepository.save(taskEntity);
-                return "Changed successfully!";
-            }
-            return "You dont have permission to perform this action.";
-        }
-        return userEntity.isPresent() ? "Assigned user email not found." : "Created user email not found.";
-    } // title cannot be changed
-
-    public String deleteTask(TaskEnrollment taskEnrollment) {
-        Optional<UserEntity> userEntity = userRepository.findByEmail(taskEnrollment.createdUserEmail());
-        Optional<UserEntity> userEntityAssgined = userRepository.findByEmail(taskEnrollment.assignedUserEmail());
-        if (userEntity.isPresent() && userEntityAssgined.isPresent()) {
-            if (userRepository.findRoleByEmail(userEntity.get().getEmail()).equals("ADMIN")) {
-                UserEntity admin = userEntity.get();
-                UserEntity user = userEntityAssgined.get();
-
-                taskRepository.removeTaskEntitiesByTitleAndAssignedUserAndCreatedBy(taskEnrollment.title(), user, admin);
+    public String deleteTask(String title, String admin) {
+        Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
+        if (!taskRepository.existsByTitle(title)) return "Task not found.";
+        if (adminUser.isPresent()) {
+            if (adminUser.get().getRole().equals("ADMIN")) {
+                taskRepository.removeTaskEntitiesByTitleAndCreatedBy(title, adminUser.get());
                 return "Task deleted successfully!";
             }
             return "You dont have permission to perform this action.";
         }
-        return userEntity.isPresent() ? "Email id not found." : "User id not found.";
+        return "User not found.";
     }
 
-    public List<TaskDisplayer> getAllTasks(String userName, String userEmail) {
-        Optional<UserEntity> userEntity = userRepository.findByUsername(userName);
-        Optional<UserEntity> userEntityAssgined = userRepository.findByEmail(userEmail);
 
-        if (userEntity.isPresent() && userEntityAssgined.isPresent()) {
-            UserEntity admin = userEntity.get();
-            UserEntity user = userEntityAssgined.get();
-            List<TaskEntity> tasks = taskRepository.findTaskEntityByAssignedUserAndCreatedBy(user, admin);
-            List<TaskDisplayer> taskDisplayers = new ArrayList<>();
-            for (var i : tasks) {
-                taskDisplayers.add(new TaskDisplayer(i.getTitle(), i.getDescription(), i.getStatus(), i.getCreatedAt(), i.getUpdatedAt(), i.getCompletedAt(), i.getDueDate(), i.getPriority(), i.getAssignedUser().getEmail(), i.getCreatedBy().getEmail()));
-            }
-            return taskDisplayers;
+    public String updateTaskDescription(String title, String description, String user) {
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
+        if (userEntity.isPresent()) {
+            if (!taskRepository.existsByTitleAndUser(title, userEntity.get())) return "Task not found.";
+            taskRepository.updateDescriptionAndUpdatedAtByTitleAndUser(description, LocalDateTime.now(), title, userEntity.get());
+            return "Task updated successfully!";
         }
-        return null;
+        return "User not found.";
     }
 
-    @Transactional
-    public String setTaskCompleted(TaskEnrollment taskEnrollment) {
-        Optional<UserEntity> userEntity = userRepository.findByEmail(taskEnrollment.createdUserEmail());
-        Optional<UserEntity> userEntityAssgined = userRepository.findByEmail(taskEnrollment.assignedUserEmail());
+    public String updateTaskDescription(String title, String description, String user, String admin) {
+        Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
 
-        if (userEntity.isPresent() && userEntityAssgined.isPresent()) {
-            if (userRepository.findRoleByEmail(userEntity.get().getEmail()).equals("ADMIN") ||
-                    userEntity.get().getEmail().equals(taskEnrollment.assignedUserEmail())) {
-                Optional<TaskEntity> task = taskRepository.getTaskEntityByTitleAndUser(taskEnrollment.title(), userEntity.get());
-                task.ifPresent(taskEntity -> {
-                    taskEntity.setStatus(Status.COMPLETED);
-                    taskRepository.save(taskEntity);
-                });
-                return "Task completed successfully!";
+        if (userEntity.isPresent() && adminUser.isPresent()) {
+            if (!taskRepository.existsByTitleAndUser(title, userEntity.get())) return "Task not found.";
+            if (adminUser.get().getRole().equals("ADMIN")) {
+                taskRepository.updateDescriptionAndUpdatedAtByTitleAndUser(description, LocalDateTime.now(), title, userEntity.get());
+                return "Task updated successfully!";
             }
             return "You dont have permission to perform this action.";
         }
-        return userEntity.isPresent() ? "Assigned user email not found." : "Created user email not found.";
+        return "User not found.";
+    }
+
+    public String updateTaskStatus(String title, String status, String user) {
+        if(!status.equals("ACTIVE") && !status.equals("COMPLETED")) return "Invalid status";
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
+        if (userEntity.isPresent()) {
+            if (!taskRepository.existsByTitleAndUser(title, userEntity.get())) return "Task not found.";
+            taskRepository.updateStatusAndCompletedAtByTitleAndUser(status, LocalDateTime.now(), title, userEntity.get());
+            return "Task updated successfully!";
+        }
+        return "User not found.";
+    }
+
+    public String updateTaskStatus(String title, String status, String user, String admin) {
+        if(!status.equals("ACTIVE") && !status.equals("COMPLETED")) return "Invalid status";
+        Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
+        if (userEntity.isPresent() && adminUser.isPresent()) {
+            if (!taskRepository.existsByTitleAndUser(title, userEntity.get())) return "Task not found.";
+            if (adminUser.get().getRole().equals("ADMIN")) {
+                taskRepository.updateStatusAndCompletedAtByTitleAndUser(status, LocalDateTime.now(), title, userEntity.get());
+                return "Task updated successfully!";
+            }
+            return "You dont have permission to perform this action.";
+        }
+        return "User not found.";
+    }
+
+    public String updateDueDate(LocalDateTime dueDate, String title, String user) {
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
+        if (userEntity.isPresent()) {
+            if (!taskRepository.existsByTitleAndUser(title, userEntity.get())) return "Task not found.";
+            taskRepository.updateDueDateAndUpdatedAtByTitleAndUser(dueDate, LocalDateTime.now(), title, userEntity.get());
+            return "Task updated successfully!";
+        }
+        return "User not found.";
+    }
+
+    public String updateDueDate(LocalDateTime dueDate, String title, String user, String admin) {
+        Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
+
+        if (userEntity.isPresent() && adminUser.isPresent()) {
+            if (!taskRepository.existsByTitleAndUser(title, userEntity.get())) return "Task not found.";
+            if (adminUser.get().getRole().equals("ADMIN")) {
+                taskRepository.updateDueDateAndUpdatedAtByTitleAndUser(dueDate, LocalDateTime.now(), title, userEntity.get());
+                return "Task updated successfully!";
+            }
+            return "You dont have permission to perform this action.";
+        }
+        return "User not found.";
+    }
+
+    public String updatePriority(String title, String priority, String user) {
+        if(!priority.equals("ACTIVE") && !priority.equals("COMPLETED")) return "Invalid priority";
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
+        if (userEntity.isPresent()) {
+            if (!taskRepository.existsByTitleAndUser(title, userEntity.get())) return "Task not found.";
+            taskRepository.updatePriorityAndUpdatedAtByTitleAndUser(priority, LocalDateTime.now(), title, userEntity.get());
+            return "Task updated successfully!";
+        }
+        return "User not found.";
+    }
+
+    public String updatePriority(String title, String priority, String user, String admin) {
+        if(!priority.equals("HIGH") && !priority.equals("MEDIUM") && !priority.equals("LOW")) return "Invalid priority";
+        Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
+        if (userEntity.isPresent() && adminUser.isPresent()) {
+            if (!taskRepository.existsByTitleAndUser(title, userEntity.get())) return "Task not found.";
+            if (adminUser.get().getRole().equals("ADMIN")) {
+                taskRepository.updatePriorityAndUpdatedAtByTitleAndUser(priority, LocalDateTime.now(), title, userEntity.get());
+                return "Task updated successfully!";
+            }
+            return "You dont have permission to perform this action.";
+        }
+        return "User not found.";
     }
 }

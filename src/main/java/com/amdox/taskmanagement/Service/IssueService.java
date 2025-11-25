@@ -6,8 +6,7 @@ import com.amdox.taskmanagement.Repository.IssueEntity;
 import com.amdox.taskmanagement.Repository.IssueRepository;
 import com.amdox.taskmanagement.Repository.UserEntity;
 import com.amdox.taskmanagement.Repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,79 +23,151 @@ public class IssueService {
         this.userRepository = userRepository;
     }
 
+    public String getIssueTokenByTitle(String title){
+        if(issueRepository.existsByTitle(title)){
+            Optional<IssueEntity> issue = issueRepository.findIssueEntitiesByTitle(title);
+            return issue.get().getIssueToken();
+        }
+        return "Issue not found";
+    }
+
     public List<IssueDTO> getIssuesByUserName(String userName, String admin) {
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
         Optional<UserEntity> user = userRepository.findByUsername(userName);
 
         if (adminUser.isPresent() && user.isPresent()) {
             if ("ADMIN".equals(adminUser.get().getRole())) {
-                List<IssueEntity> issues = issueRepository.findIssueEntitiesByIssuedUser(user.get());
-                return issues.stream().map(issue -> new IssueDTO(issue.getTitle(), issue.getDescription(), issue.getComments(), admin,  userName, issue.getStatus())).collect(Collectors.toList());
+                Optional<IssueEntity> issues = issueRepository.findIssueEntitiesByIssuedUser(user.get());
+                return issues.stream().map(issue -> new IssueDTO(issue.getTitle(), issue.getDescription(), issue.getComments(), admin, userName, issue.getStatus())).collect(Collectors.toList());
             }
             return null;
         }
         return null;
     }
 
-    public String createIssue(IssueEnrollment issueEnrollment, String userName) {
+    public List<IssueDTO> getIssuesByUserName(String userName) {
         Optional<UserEntity> user = userRepository.findByUsername(userName);
+        if (user.isPresent()) {
+            Optional<IssueEntity> issues = issueRepository.findIssueEntitiesByIssuedUser(user.get());
+            if (issues.isPresent())
+                return issues.stream().map(issue -> new IssueDTO(issue.getTitle(), issue.getDescription(), issue.getComments(), issue.getIssuedTo().getUsername(), issue.getIssuedUser().getUsername(), issue.getStatus())).collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    public String createIssue(IssueEnrollment issueEnrollment, String admin) {
+        Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
         Optional<UserEntity> assignedToUser = userRepository.findByUsername(issueEnrollment.issuedTo());
-        if (assignedToUser.isPresent() && user.isPresent()) {
-            IssueEntity issueEntity = new IssueEntity(issueEnrollment.title(), issueEnrollment.description(), issueEnrollment.comment(), user.get(), assignedToUser.get());
-            issueRepository.save(issueEntity);
-            return "Issue created successfully.";
+        if (assignedToUser.isPresent() && adminUser.isPresent()) {
+            if (adminUser.get().getRole().equals("ADMIN")) {
+                if(!issueRepository.existsByTitle(issueEnrollment.title())){
+                    IssueEntity issueEntity = new IssueEntity(issueEnrollment.title(), issueEnrollment.description(), issueEnrollment.comment(), adminUser.get(), assignedToUser.get());
+                    issueRepository.save(issueEntity);
+                    return "Issue created successfully.";
+                }
+                return "Issue with title already exists.";
+            }
+            return "You do not have permission to perform this action.";
         }
         return "User do not exist.";
     }
 
-    public String updateIssue(IssueEnrollment issueEnrollment, String userName) {
-        Optional<UserEntity> currentUserOpt = userRepository.findByUsername(userName);
-        Optional<UserEntity> issuedByUserOpt = userRepository.findByUsername(issueEnrollment.issuedBy());
-        Optional<UserEntity> issuedToUserOpt = userRepository.findByUsername(issueEnrollment.issuedTo());
-
-        if (currentUserOpt.isEmpty()) {
-            return "Authenticated user does not exist.";
-        }
-
-        if (issuedByUserOpt.isEmpty()) {
-            return "Issued By user does not exist.";
-        }
-
-        Optional<IssueEntity> issueOpt = issueRepository.findIssueEntitiesByIssuedUserAndTitle(issuedByUserOpt.get(), issueEnrollment.title());
-        if (issueOpt.isEmpty()) {
-            return "Cannot find issue with title: " + issueEnrollment.title() + ".";
-        }
-
-        IssueEntity issue = issueOpt.get();
-        UserEntity currentUser = currentUserOpt.get();
-
-        boolean isIssuedBy = issue.getIssuedUser().getUsername().equals(currentUser.getUsername());
-        boolean isIssuedTo = issue.getIssuedTo() != null && issue.getIssuedTo().getUsername().equals(currentUser.getUsername());
-
-        if (!(isIssuedBy || isIssuedTo)) {
-            return "You do not have permission to update this issue.";
-        }
-        issue.setDescription(issueEnrollment.description());
-        issue.setComments(issueEnrollment.comment());
-        if (issuedToUserOpt.isPresent()) {
-            UserEntity issuedToUser = issuedToUserOpt.get();
-            if (issue.getIssuedTo() == null || !issue.getIssuedTo().getUsername().equals(issuedToUser.getUsername())) {
-                issue.setIssuedTo(issuedToUser);
-            }
-        }
-        issueRepository.save(issue);
-        return "Issue updated successfully.";
-    }
-
-    public String closeIssue(IssueEnrollment issueEnrollment, String userName) {
-        if (issueRepository.existsByTitle(issueEnrollment.title())) {
-            Optional<UserEntity> user = userRepository.findByUsername(userName);
-            if (user.isPresent() && "ADMIN".equals(user.get().getRole())) {
-                issueRepository.deleteIssueEntitiesByTitle(issueEnrollment.title());
+    public String closeIssue(String issueToken, String admin) {
+        if (issueRepository.existsByIssueToken(issueToken)) {
+            Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
+            if (adminUser.isPresent() && "ADMIN".equals(adminUser.get().getRole())) {
+                issueRepository.deleteIssueEntitiesByIssueToken(issueToken);
                 return "Issue closed successfully.";
             }
-            return "You don't have permission to close this issue.";
+            return "You don't have permission to perform this action.";
         }
         return "Issue does not exist.";
+    }
+
+    public String updateIssueByDescription(String description, String token, String user) {
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
+        if (userEntity.isPresent()) {
+            if(issueRepository.existsByIssueToken(token)) {
+                issueRepository.updateIssueDescriptionByIssueToken(description, token);
+                return "Issue updated successfully.";
+            }
+            return "Issue does not exist.";
+        }
+        return "User do not exist.";
+    }
+
+    public String updateIssueByDescription(String description, String token, String user, String admin) {
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
+        Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
+        if (userEntity.isPresent() && adminUser.isPresent()) {
+            if (adminUser.get().getRole().equals("ADMIN")) {
+                if(!issueRepository.existsByIssueToken(token)) {
+                    issueRepository.updateIssueDescriptionByIssueToken(description, token);
+                }
+                return "Issue doesnt exist.";
+            }
+            return "You do not have permission to perform this action.";
+        }
+        return "User do not exist.";
+    }
+
+
+    public String updateIssueByComment(String comment, String issueToken, String user) {
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
+        if (userEntity.isPresent()) {
+            if(issueRepository.existsByIssueToken(issueToken)) {
+                issueRepository.updateIssueCommentByIssueToken(comment, issueToken);
+                return "Issue updated successfully.";
+            }
+            return "Issue does not exist.";
+        }
+        return "User do not exist.";
+    }
+
+    public String updateIssueByComment(String comment, String issueToken, String user, String admin) {
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
+        Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
+
+        if (userEntity.isPresent() && adminUser.isPresent()) {
+            if (adminUser.get().getRole().equals("ADMIN")) {
+                if(!issueRepository.existsByIssueToken(issueToken)) {
+                    issueRepository.updateIssueCommentByIssueToken(comment, issueToken);
+                    return "Issue updated successfully.";
+                }
+                return "Issue does not exist.";
+            }
+            return "You do not have permission to perform this action.";
+        }
+        return "User do not exist.";
+    }
+
+    public String updateIssueByStatus(String status, String issueToken, String user) {
+        if(!status.equals("ACTIVE") && !status.equals("COMPLETED")) return "Invalid status.";
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
+        if (userEntity.isPresent()) {
+            if(issueRepository.existsByIssueToken(issueToken)) {
+                issueRepository.updateIssueStatusByIssueToken(status, issueToken);
+                return "Issue updated successfully.";
+            }
+            return "Issue does not exist.";
+        }
+        return "User do not exist.";
+    }
+
+    public String updateIssueByStatus(String status, String issueToken, String user, String admin) {
+        if(!status.equals("ACTIVE") && !status.equals("COMPLETED")) return "Invalid status.";
+        Optional<UserEntity> userEntity = userRepository.findByUsername(user);
+        Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
+        if (userEntity.isPresent() && adminUser.isPresent()) {
+            if (adminUser.get().getRole().equals("ADMIN")) {
+                if(!issueRepository.existsByIssueToken(issueToken)) {
+                    issueRepository.updateIssueStatusByIssueToken(status, issueToken);
+                    return "Issue updated successfully.";
+                }
+                return "Issue does not exist.";
+            }
+            return "You do not have permission to perform this action.";
+        }
+        return "User do not exist.";
     }
 }
