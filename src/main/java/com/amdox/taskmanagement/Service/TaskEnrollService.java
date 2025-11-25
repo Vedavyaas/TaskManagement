@@ -26,7 +26,7 @@ public class TaskEnrollService {
 
         if (userEntity.isPresent() && adminUser.isPresent()) {
             if (adminUser.get().getRole().equals("ADMIN")) {
-                Optional<TaskEntity> tasks = taskRepository.findTaskEntityByAssignedUserAndCreatedBy(adminUser.get(), userEntity.get());
+                List<TaskEntity> tasks = taskRepository.findTaskEntityByAssignedUserAndCreatedBy(adminUser.get(), userEntity.get());
                 return tasks.stream().map(task -> new TaskDTO(task.getTitle(), task.getDescription(), task.getStatus(), task.getCreatedAt(), task.getUpdatedAt(), task.getCompletedAt(), task.getDueDate(), task.getPriority(), task.getCreatedBy().getUsername(), task.getAssignedUser().getUsername())).toList();
             }
         }
@@ -36,7 +36,7 @@ public class TaskEnrollService {
     public List<TaskDTO> getAllTasks(String username) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
         if (userEntity.isPresent()) {
-            Optional<TaskEntity> tasks = taskRepository.findTaskEntityByAssignedUser(userEntity.get());
+            List<TaskEntity> tasks = taskRepository.findTaskEntityByAssignedUser(userEntity.get());
             return tasks.stream().map(task -> new TaskDTO(task.getTitle(), task.getDescription(), task.getStatus(), task.getCreatedAt(), task.getUpdatedAt(), task.getCompletedAt(), task.getDueDate(), task.getPriority(), task.getCreatedBy().getUsername(), task.getAssignedUser().getUsername())).toList();
         }
         return null;

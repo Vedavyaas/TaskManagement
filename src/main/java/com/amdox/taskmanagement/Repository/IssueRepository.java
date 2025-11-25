@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IssueRepository extends JpaRepository<IssueEntity, Long> {
-    Optional<IssueEntity> findIssueEntitiesByIssuedUser(UserEntity user);
+    List<IssueEntity> findIssueEntitiesByIssuedUser(UserEntity user);
+    List<IssueEntity> findIssueEntitiesByIssuedTo(UserEntity user);
 
     boolean existsByTitle(String title);
 

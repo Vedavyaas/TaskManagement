@@ -37,7 +37,7 @@ public class IssueService {
 
         if (adminUser.isPresent() && user.isPresent()) {
             if ("ADMIN".equals(adminUser.get().getRole())) {
-                Optional<IssueEntity> issues = issueRepository.findIssueEntitiesByIssuedUser(user.get());
+                List<IssueEntity> issues = issueRepository.findIssueEntitiesByIssuedUser(user.get());
                 return issues.stream().map(issue -> new IssueDTO(issue.getTitle(), issue.getDescription(), issue.getComments(), admin, userName, issue.getStatus())).collect(Collectors.toList());
             }
             return null;
@@ -48,9 +48,8 @@ public class IssueService {
     public List<IssueDTO> getIssuesByUserName(String userName) {
         Optional<UserEntity> user = userRepository.findByUsername(userName);
         if (user.isPresent()) {
-            Optional<IssueEntity> issues = issueRepository.findIssueEntitiesByIssuedUser(user.get());
-            if (issues.isPresent())
-                return issues.stream().map(issue -> new IssueDTO(issue.getTitle(), issue.getDescription(), issue.getComments(), issue.getIssuedTo().getUsername(), issue.getIssuedUser().getUsername(), issue.getStatus())).collect(Collectors.toList());
+            List<IssueEntity> issues = issueRepository.findIssueEntitiesByIssuedTo(user.get());
+            return issues.stream().map(issue -> new IssueDTO(issue.getTitle(), issue.getDescription(), issue.getComments(), issue.getIssuedTo().getUsername(), issue.getIssuedUser().getUsername(), issue.getStatus())).collect(Collectors.toList());
         }
         return null;
     }
