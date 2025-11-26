@@ -16,7 +16,6 @@ public interface IssueRepository extends JpaRepository<IssueEntity, Long> {
     boolean existsByTitle(String title);
 
     @Modifying
-    @Transactional
     @Query("DELETE FROM IssueEntity i WHERE i.issueToken = :token")
     void deleteIssueEntitiesByIssueToken(String token);
 
@@ -25,17 +24,14 @@ public interface IssueRepository extends JpaRepository<IssueEntity, Long> {
     boolean existsByIssueToken(String issueToken);
 
     @Modifying
-    @Transactional
     @Query("UPDATE IssueEntity i SET i.description = :description WHERE i.issueToken = :token")
     void updateIssueDescriptionByIssueToken(String description, String token);
 
     @Modifying
-    @Transactional
     @Query("UPDATE IssueEntity i SET i.comments = :comment WHERE i.issueToken = :issueToken")
     void updateIssueCommentByIssueToken(String comment, String issueToken);
 
     @Modifying
-    @Transactional
     @Query("UPDATE IssueEntity i SET i.status = :status WHERE i.issueToken = :issueToken")
     void updateIssueStatusByIssueToken(String status, String issueToken);
 }

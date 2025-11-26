@@ -19,12 +19,10 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
     List<TaskEntity> findTaskEntityByAssignedUser(UserEntity userEntity);
 
     @Modifying
-    @Transactional
     @Query("DELETE FROM TaskEntity t WHERE t.title = :title AND t.createdBy = :createdBy")
     void removeTaskEntitiesByTitleAndCreatedBy(String title, UserEntity createdBy);
 
     @Modifying
-    @Transactional
     @Query("UPDATE TaskEntity t SET t.description =: description, t.updatedAt = :now WHERE t.title = :title AND t.assignedUser = :user")
     void updateDescriptionAndUpdatedAtByTitleAndUser(String description, LocalDateTime now, String title, UserEntity user);
 
@@ -32,17 +30,14 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
     boolean existsByTitleAndUser(String title, UserEntity userEntity);
 
     @Modifying
-    @Transactional
     @Query("UPDATE TaskEntity t SET t.status = :status, t.completedAt = :now WHERE t.title = :title AND  t.assignedUser = :userEntity")
     void updateStatusAndCompletedAtByTitleAndUser(String status, LocalDateTime now, String title, UserEntity userEntity);
 
     @Modifying
-    @Transactional
     @Query("UPDATE TaskEntity t SET t.dueDate = :dueDate, t.updatedAt = :now WHERE t.title = :title AND t.assignedUser = :userEntity")
     void updateDueDateAndUpdatedAtByTitleAndUser(LocalDateTime dueDate, LocalDateTime now, String title, UserEntity userEntity);
 
     @Modifying
-    @Transactional
     @Query("UPDATE TaskEntity t SET t.priority = :priority, t.updatedAt = :now WHERE t.title = :title AND t.assignedUser = :userEntity")
     void updatePriorityAndUpdatedAtByTitleAndUser(String priority, LocalDateTime now, String title, UserEntity userEntity);
 }

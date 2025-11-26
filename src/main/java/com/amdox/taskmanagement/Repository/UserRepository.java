@@ -27,27 +27,22 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> findByCompanyName(String companyName);
 
     @Modifying
-    @Transactional
     @Query("UPDATE UserEntity u SET u.username = :username WHERE u.email = :email")
     void updateUsernameByEmail(String email, String username);
 
     @Modifying
-    @Transactional
     @Query("UPDATE UserEntity u SET u.fullName = :fullName WHERE u.email = :email")
     void updateFullNameByEmail(String email, String fullName);
 
     @Modifying
-    @Transactional
     @Query("UPDATE UserEntity u SET u.organization = :organization WHERE u.email = :email")
     void updateOrganizationByEmail(String organization, String email);
 
     @Modifying
-    @Transactional
     @Query("UPDATE UserEntity u SET u.domain = :domain WHERE u.email = :email")
     void updateDomainByEmail(String email, String domain);
 
     @Modifying
-    @Transactional
     @Query("UPDATE UserEntity u SET u.companyName = :companyName WHERE u.email = :email")
     void updateCompanyNameByEmail(String email, String companyName);
 }

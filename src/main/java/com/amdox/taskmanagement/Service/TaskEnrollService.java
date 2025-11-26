@@ -4,6 +4,7 @@ import com.amdox.taskmanagement.Assests.Status;
 import com.amdox.taskmanagement.Assests.TaskDTO;
 import com.amdox.taskmanagement.Assests.TaskEnrollment;
 import com.amdox.taskmanagement.Repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -59,6 +60,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @Transactional
     public String deleteTask(String title, String admin) {
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
         if (!taskRepository.existsByTitle(title)) return "Task not found.";
@@ -72,7 +74,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
-
+    @Transactional
     public String updateTaskDescription(String title, String description, String user) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
         if (userEntity.isPresent()) {
@@ -83,6 +85,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @Transactional
     public String updateTaskDescription(String title, String description, String user, String admin) {
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -98,6 +101,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @Transactional
     public String updateTaskStatus(String title, String status, String user) {
         if(!status.equals("ACTIVE") && !status.equals("COMPLETED")) return "Invalid status";
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -109,6 +113,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @Transactional
     public String updateTaskStatus(String title, String status, String user, String admin) {
         if(!status.equals("ACTIVE") && !status.equals("COMPLETED")) return "Invalid status";
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
@@ -124,6 +129,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @Transactional
     public String updateDueDate(LocalDateTime dueDate, String title, String user) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
         if (userEntity.isPresent()) {
@@ -134,6 +140,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @Transactional
     public String updateDueDate(LocalDateTime dueDate, String title, String user, String admin) {
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -149,6 +156,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @Transactional
     public String updatePriority(String title, String priority, String user) {
         if(!priority.equals("ACTIVE") && !priority.equals("COMPLETED")) return "Invalid priority";
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -160,6 +168,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @Transactional
     public String updatePriority(String title, String priority, String user, String admin) {
         if(!priority.equals("HIGH") && !priority.equals("MEDIUM") && !priority.equals("LOW")) return "Invalid priority";
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);

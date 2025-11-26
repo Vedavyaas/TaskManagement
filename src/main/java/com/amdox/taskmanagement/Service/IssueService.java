@@ -6,7 +6,7 @@ import com.amdox.taskmanagement.Repository.IssueEntity;
 import com.amdox.taskmanagement.Repository.IssueRepository;
 import com.amdox.taskmanagement.Repository.UserEntity;
 import com.amdox.taskmanagement.Repository.UserRepository;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -71,6 +71,7 @@ public class IssueService {
         return "User do not exist.";
     }
 
+    @Transactional
     public String closeIssue(String issueToken, String admin) {
         if (issueRepository.existsByIssueToken(issueToken)) {
             Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
@@ -83,6 +84,7 @@ public class IssueService {
         return "Issue does not exist.";
     }
 
+    @Transactional
     public String updateIssueByDescription(String description, String token, String user) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
         if (userEntity.isPresent()) {
@@ -95,6 +97,7 @@ public class IssueService {
         return "User do not exist.";
     }
 
+    @Transactional
     public String updateIssueByDescription(String description, String token, String user, String admin) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
@@ -110,7 +113,7 @@ public class IssueService {
         return "User do not exist.";
     }
 
-
+    @Transactional
     public String updateIssueByComment(String comment, String issueToken, String user) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
         if (userEntity.isPresent()) {
@@ -123,6 +126,7 @@ public class IssueService {
         return "User do not exist.";
     }
 
+    @Transactional
     public String updateIssueByComment(String comment, String issueToken, String user, String admin) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
@@ -140,6 +144,7 @@ public class IssueService {
         return "User do not exist.";
     }
 
+    @Transactional
     public String updateIssueByStatus(String status, String issueToken, String user) {
         if(!status.equals("ACTIVE") && !status.equals("COMPLETED")) return "Invalid status.";
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -153,6 +158,7 @@ public class IssueService {
         return "User do not exist.";
     }
 
+    @Transactional
     public String updateIssueByStatus(String status, String issueToken, String user, String admin) {
         if(!status.equals("ACTIVE") && !status.equals("COMPLETED")) return "Invalid status.";
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);

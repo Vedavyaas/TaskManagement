@@ -2,6 +2,7 @@ package com.amdox.taskmanagement.Service;
 
 import com.amdox.taskmanagement.Repository.UserEntity;
 import com.amdox.taskmanagement.Repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class UserEntityUpdateService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public String updateUsername(String email, String username, String password) {
         if (userRepository.existsByEmail(email)) {
             if (!userRepository.existsByUsername(username)) {
@@ -33,6 +35,7 @@ public class UserEntityUpdateService {
         return "Email does not exist.";
     }
 
+    @Transactional
     public String updateFullName(String email, String fullName, String password) {
         if (userRepository.existsByEmail(email)) {
             Optional<UserEntity> userOpt = userRepository.findByEmail(email);
@@ -45,6 +48,7 @@ public class UserEntityUpdateService {
         return "Email does not exist.";
     }
 
+    @Transactional
     public String updateOrganization(String email, String organization, String password) {
         if (userRepository.existsByEmail(email)) {
             Optional<UserEntity> userOpt = userRepository.findByEmail(email);
@@ -57,6 +61,7 @@ public class UserEntityUpdateService {
         return "Email does not exist.";
     }
 
+    @Transactional
     public String updateDomain(String email, String domain, String password) {
         if (userRepository.existsByEmail(email)) {
             Optional<UserEntity> userOpt = userRepository.findByEmail(email);
@@ -69,6 +74,7 @@ public class UserEntityUpdateService {
         return "Email does not exist.";
     }
 
+    @Transactional
     public String updateCompanyName(String email, String company, String password) {
         if (userRepository.existsByEmail(email)) {
             Optional<UserEntity> userOpt = userRepository.findByEmail(email);
