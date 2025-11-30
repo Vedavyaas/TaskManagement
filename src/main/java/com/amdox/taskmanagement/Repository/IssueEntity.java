@@ -27,6 +27,18 @@ public class IssueEntity {
     @JoinColumn(name = "issued_to_id")
     private UserEntity issuedTo;
 
+    @ManyToOne
+    @JoinColumn(name = "attachment_id")
+    private AttachmentEntity attachment;
+
+    public AttachmentEntity getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(AttachmentEntity attachment) {
+        this.attachment = attachment;
+    }
+
     public IssueEntity() {
     }
 
@@ -102,5 +114,12 @@ public class IssueEntity {
 
     public void setIssuedTo(UserEntity issuedTo) {
         this.issuedTo = issuedTo;
+    }
+
+    public AttachmentEntity getAttachmentEntity() {
+        return attachment;
+    }
+    public void setAttachmentEntity(AttachmentEntity attachmentEntity) {
+        this.attachment = attachmentEntity;
     }
 }

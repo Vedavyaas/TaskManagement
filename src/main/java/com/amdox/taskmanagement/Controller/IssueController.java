@@ -2,9 +2,12 @@ package com.amdox.taskmanagement.Controller;
 
 import com.amdox.taskmanagement.Assests.IssueDTO;
 import com.amdox.taskmanagement.Assests.IssueEnrollment;
+import com.amdox.taskmanagement.Service.CloudService;
 import com.amdox.taskmanagement.Service.IssueService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,8 +16,11 @@ public class IssueController {
 
     private final IssueService issueService;
 
-    public IssueController(IssueService issueService) {
+    private final CloudService cloudService;
+
+    public IssueController(IssueService issueService, CloudService cloudService) {
         this.issueService = issueService;
+        this.cloudService = cloudService;
     }
 
     @GetMapping("/get/issueToken")
@@ -80,5 +86,22 @@ public class IssueController {
         String admin = SecurityContextHolder.getContext().getAuthentication().getName();
         return issueService.updateIssueByStatus(status, issueToken, user, admin);
     }
-}
 
+    @GetMapping("/issue/getAttachments")
+    public ResponseEntity<String> getIssueAttachments(@RequestParam String issueTitle){
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        return cloudService.getAttachments(issueTitle, user);
+    }
+
+    @PostMapping("/put/attachements")
+    public String putIssueAttachments(@RequestParam MultipartFile file,  @RequestParam String issueTitle){
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        return cloudService.putAttachments(file, user, issueTitle);
+    }
+
+    @PostMapping("/put/attachments/other")
+    public String putIssueAttachments(@RequestParam MultipartFile file, @RequestParam String issueTitle, @RequestParam String user){
+        String admin = SecurityContextHolder.getContext().getAuthentication().getName();
+        return cloudService.putAttachments(file, user, issueTitle, admin);
+    }
+}

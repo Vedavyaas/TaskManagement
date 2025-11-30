@@ -12,8 +12,7 @@ public class AttachmentEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Type contentType;
+    private String contentType;
 
     private String fileName;
 
@@ -26,29 +25,24 @@ public class AttachmentEntity {
     private UserEntity uploadedBy;
 
     @ManyToOne
-    @JoinColumn(name = "task_id")
-    private TaskEntity task;
-
-    @ManyToOne
     @JoinColumn(name = "issue_id")
     private IssueEntity issue;
 
     public AttachmentEntity() {}
 
-    public AttachmentEntity(String fileName, Type contentType, String fileUrl, UserEntity uploadedBy, TaskEntity task, IssueEntity issue) {
+    public AttachmentEntity(String fileName, String contentType, String fileUrl, UserEntity uploadedBy, IssueEntity issue) {
         this.fileName = fileName;
         this.contentType = contentType;
         this.fileUrl = fileUrl;
         this.uploadedBy = uploadedBy;
-        this.task = task;
         this.issue = issue;
     }
 
-    public Type getContentType() {
+    public String getContentType() {
         return contentType;
     }
 
-    public void setContentType(Type contentType) {
+    public void setContentType(String contentType) {
         this.contentType = contentType;
     }
 
@@ -82,14 +76,6 @@ public class AttachmentEntity {
 
     public void setUploadedBy(UserEntity uploadedBy) {
         this.uploadedBy = uploadedBy;
-    }
-
-    public TaskEntity getTask() {
-        return task;
-    }
-
-    public void setTask(TaskEntity task) {
-        this.task = task;
     }
 
     public IssueEntity getIssue() {
