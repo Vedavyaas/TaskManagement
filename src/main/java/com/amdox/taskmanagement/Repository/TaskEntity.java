@@ -27,6 +27,8 @@ public class TaskEntity {
     @ManyToOne
     @JoinColumn(name = "created_by_id")
     private UserEntity createdBy;
+    @OneToOne
+    private WorkFlowEntity workFlow;
 
     public TaskEntity() {
     }
@@ -122,5 +124,13 @@ public class TaskEntity {
 
     public void setPriority(Priority priority) {
         this.priority = priority;
+    }
+
+    public WorkFlowEntity getWorkFlow() {
+        return workFlow;
+    }
+
+    public void setWorkFlow(WorkFlowEntity workFlow) {
+        this.workFlow = workFlow;
     }//getters and setters
 }

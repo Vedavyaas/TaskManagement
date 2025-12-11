@@ -6,7 +6,6 @@ import com.amdox.taskmanagement.Service.CloudService;
 import com.amdox.taskmanagement.Service.IssueService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -88,7 +87,7 @@ public class IssueController {
     }
 
     @GetMapping("/issue/getAttachments")
-    public ResponseEntity<String> getIssueAttachments(@RequestParam String issueTitle){
+    public String getIssueAttachments(@RequestParam String issueTitle){
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
         return cloudService.getAttachments(issueTitle, user);
     }
