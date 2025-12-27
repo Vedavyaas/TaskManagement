@@ -132,5 +132,13 @@ public class TaskEntity {
 
     public void setWorkFlow(WorkFlowEntity workFlow) {
         this.workFlow = workFlow;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }//getters and setters
 }
