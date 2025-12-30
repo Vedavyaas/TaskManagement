@@ -1,5 +1,6 @@
 package com.amdox.taskmanagement.Service;
 
+import com.amdox.taskmanagement.Aspect.LoggingAnnotation;
 import com.amdox.taskmanagement.Repository.UserEntity;
 import com.amdox.taskmanagement.Repository.UserRepository;
 import org.springframework.security.core.userdetails.User;
@@ -18,6 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
+    @LoggingAnnotation("Username loaded(By server) - ignorable")
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));

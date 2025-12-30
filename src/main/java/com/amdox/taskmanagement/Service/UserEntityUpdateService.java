@@ -1,5 +1,6 @@
 package com.amdox.taskmanagement.Service;
 
+import com.amdox.taskmanagement.Aspect.LoggingAnnotation;
 import com.amdox.taskmanagement.Repository.UserEntity;
 import com.amdox.taskmanagement.Repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -19,6 +20,7 @@ public class UserEntityUpdateService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @LoggingAnnotation("Updated username")
     @Transactional
     public String updateUsername(String email, String username, String password) {
         if (userRepository.existsByEmail(email)) {
@@ -35,6 +37,7 @@ public class UserEntityUpdateService {
         return "Email does not exist.";
     }
 
+    @LoggingAnnotation("Updated full name")
     @Transactional
     public String updateFullName(String email, String fullName, String password) {
         if (userRepository.existsByEmail(email)) {
@@ -48,6 +51,7 @@ public class UserEntityUpdateService {
         return "Email does not exist.";
     }
 
+    @LoggingAnnotation("Updated organization")
     @Transactional
     public String updateOrganization(String email, String organization, String password) {
         if (userRepository.existsByEmail(email)) {
@@ -61,6 +65,7 @@ public class UserEntityUpdateService {
         return "Email does not exist.";
     }
 
+    @LoggingAnnotation("Updated domain")
     @Transactional
     public String updateDomain(String email, String domain, String password) {
         if (userRepository.existsByEmail(email)) {
@@ -74,6 +79,7 @@ public class UserEntityUpdateService {
         return "Email does not exist.";
     }
 
+    @LoggingAnnotation("Updated company name")
     @Transactional
     public String updateCompanyName(String email, String company, String password) {
         if (userRepository.existsByEmail(email)) {

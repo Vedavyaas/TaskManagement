@@ -1,5 +1,6 @@
 package com.amdox.taskmanagement.Service;
 
+import com.amdox.taskmanagement.Aspect.LoggingAnnotation;
 import com.amdox.taskmanagement.Assests.IssueDTO;
 import com.amdox.taskmanagement.Assests.IssueEnrollment;
 import com.amdox.taskmanagement.Repository.IssueEntity;
@@ -23,6 +24,7 @@ public class IssueService {
         this.userRepository = userRepository;
     }
 
+    @LoggingAnnotation("Retrived issue token by title")
     public String getIssueTokenByTitle(String title){
         if(issueRepository.existsByTitle(title)){
             Optional<IssueEntity> issue = issueRepository.findIssueEntitiesByTitle(title);
@@ -31,6 +33,7 @@ public class IssueService {
         return "Issue not found";
     }
 
+    @LoggingAnnotation("Retrived issue by username")
     public List<IssueDTO> getIssuesByUserName(String userName, String admin) {
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
         Optional<UserEntity> user = userRepository.findByUsername(userName);
@@ -45,6 +48,7 @@ public class IssueService {
         return null;
     }
 
+    @LoggingAnnotation("Retrived issue by username")
     public List<IssueDTO> getIssuesByUserName(String userName) {
         Optional<UserEntity> user = userRepository.findByUsername(userName);
         if (user.isPresent()) {
@@ -54,6 +58,7 @@ public class IssueService {
         return null;
     }
 
+    @LoggingAnnotation("Created issue")
     public String createIssue(IssueEnrollment issueEnrollment, String admin) {
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
         Optional<UserEntity> assignedToUser = userRepository.findByUsername(issueEnrollment.issuedTo());
@@ -71,6 +76,7 @@ public class IssueService {
         return "User do not exist.";
     }
 
+    @LoggingAnnotation("Closed issue")
     @Transactional
     public String closeIssue(String issueToken, String admin) {
         if (issueRepository.existsByIssueToken(issueToken)) {
@@ -84,6 +90,7 @@ public class IssueService {
         return "Issue does not exist.";
     }
 
+    @LoggingAnnotation("Updated issue description")
     @Transactional
     public String updateIssueByDescription(String description, String token, String user) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -97,6 +104,7 @@ public class IssueService {
         return "User do not exist.";
     }
 
+    @LoggingAnnotation("Updated issue description")
     @Transactional
     public String updateIssueByDescription(String description, String token, String user, String admin) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -113,6 +121,7 @@ public class IssueService {
         return "User do not exist.";
     }
 
+    @LoggingAnnotation("Updated issue comment")
     @Transactional
     public String updateIssueByComment(String comment, String issueToken, String user) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -126,6 +135,7 @@ public class IssueService {
         return "User do not exist.";
     }
 
+    @LoggingAnnotation("Updated issue comment")
     @Transactional
     public String updateIssueByComment(String comment, String issueToken, String user, String admin) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -144,6 +154,7 @@ public class IssueService {
         return "User do not exist.";
     }
 
+    @LoggingAnnotation("Updated issue status")
     @Transactional
     public String updateIssueByStatus(String status, String issueToken, String user) {
         if(!status.equals("ACTIVE") && !status.equals("COMPLETED")) return "Invalid status.";
@@ -158,6 +169,7 @@ public class IssueService {
         return "User do not exist.";
     }
 
+    @LoggingAnnotation("Updated issue status")
     @Transactional
     public String updateIssueByStatus(String status, String issueToken, String user, String admin) {
         if(!status.equals("ACTIVE") && !status.equals("COMPLETED")) return "Invalid status.";

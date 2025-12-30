@@ -1,5 +1,6 @@
 package com.amdox.taskmanagement.Service;
 
+import com.amdox.taskmanagement.Aspect.LoggingAnnotation;
 import com.amdox.taskmanagement.Assests.Stage;
 import com.amdox.taskmanagement.Assests.Status;
 import com.amdox.taskmanagement.Repository.TaskEntity;
@@ -25,40 +26,31 @@ public class WorkFlowInitializationService implements CommandLineRunner {
 
     @Override
     @Transactional
+    @LoggingAnnotation("Workflow initialized")
     public void run(String... args) throws Exception {
-        // Initialize workflow data for existing tasks
         List<TaskEntity> tasks = taskRepository.findAll();
         
         for (TaskEntity task : tasks) {
             try {
-                // Check if workflow already exists for this task
                 WorkFlowEntity existingWorkflow = workFlowService.getWorkflowByTaskId(task.getId());
                 if (existingWorkflow != null) {
-                    continue; // Skip if workflow already exists
+                    continue;
                 }
-                
-                // Determine stage based on task status
                 String stage = determineStageByStatus(task.getStatus());
-                
-                // Create workflow for the task
                 workFlowService.createWorkflow(task.getId(), stage);
                 
             } catch (Exception e) {
-                // Log the error but continue with other tasks
-                System.err.println("Failed to create workflow for task " + task.getId() + ": " + e.getMessage());
+                //omitted
             }
         }
-        
-        System.out.println("Workflow initialization completed successfully!");
     }
 
+    @LoggingAnnotation("Workflow stage determined - ignorable")
     private String determineStageByStatus(Status status) {
         if (status == Status.COMPLETED) {
             return "DONE";
         } else if (status == Status.ACTIVE) {
-            // For active tasks, alternate between TO_DO and IN_PROGRESS based on task ID
-            // This ensures a good distribution of stages
-            return "IN_PROGRESS"; // Default to IN_PROGRESS for active tasks
+            return "IN_PROGRESS";
         } else {
             return "TO_DO";
         }

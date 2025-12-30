@@ -2,6 +2,7 @@ package com.amdox.taskmanagement.Controller;
 
 import com.amdox.taskmanagement.Assests.JWTResponse;
 import com.amdox.taskmanagement.Assests.LoginRequest;
+import com.amdox.taskmanagement.Aspect.LoggingAnnotation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +29,7 @@ public class JWTAuthenticationController {
         this.authenticationManager = authenticationManager;
     }
 
+    @LoggingAnnotation("User logged in successfully")
     @PostMapping("/authenticate")
     ResponseEntity<JWTResponse> authenticate(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));

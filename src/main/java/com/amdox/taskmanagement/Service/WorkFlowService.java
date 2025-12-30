@@ -1,5 +1,6 @@
 package com.amdox.taskmanagement.Service;
 
+import com.amdox.taskmanagement.Aspect.LoggingAnnotation;
 import com.amdox.taskmanagement.Assests.Stage;
 import com.amdox.taskmanagement.Repository.*;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class WorkFlowService {
         this.taskRepository = taskRepository;
     }
 
+    @LoggingAnnotation("Retrived workflow")
     public List<WorkFlowEntity> getWorkFlowsByAdmin(String adminUsername) {
         Optional<UserEntity> adminEntity = userRepository.findByUsername(adminUsername);
 
@@ -40,6 +42,7 @@ public class WorkFlowService {
                 .collect(Collectors.toList());
     }
 
+    @LoggingAnnotation("Created workflow")
     public WorkFlowEntity createWorkflow(Long taskId, String stageString) {
         Optional<TaskEntity> taskOptional = taskRepository.findById(taskId);
         
@@ -62,6 +65,7 @@ public class WorkFlowService {
         }
     }
 
+    @LoggingAnnotation("Updated workflow")
     public WorkFlowEntity updateWorkflowStage(Long workflowId, String stageString) {
         Optional<WorkFlowEntity> workflowOptional = workFlowRepository.findById(workflowId);
         
@@ -79,6 +83,7 @@ public class WorkFlowService {
         }
     }
 
+    @LoggingAnnotation("Deleted workflow")
     public void deleteWorkflow(Long workflowId) {
         if (!workFlowRepository.existsById(workflowId)) {
             throw new RuntimeException("Workflow not found with id: " + workflowId);
@@ -86,6 +91,7 @@ public class WorkFlowService {
         workFlowRepository.deleteById(workflowId);
     }
 
+    @LoggingAnnotation("Retrived workflow")
     public WorkFlowEntity getWorkflowByTaskId(Long taskId) {
         Optional<TaskEntity> taskOptional = taskRepository.findById(taskId);
         

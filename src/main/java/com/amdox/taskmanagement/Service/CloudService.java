@@ -1,5 +1,6 @@
 package com.amdox.taskmanagement.Service;
 
+import com.amdox.taskmanagement.Aspect.LoggingAnnotation;
 import com.amdox.taskmanagement.Repository.*;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -28,6 +29,7 @@ public class CloudService{
         this.attachmentRepository = attachmentRepository;
     }
 
+    @LoggingAnnotation("Added attachments")
     public String putAttachments(MultipartFile file, String user, String issueTitle) {
         if (file == null || file.isEmpty()) return "Invalid file.";
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -44,6 +46,7 @@ public class CloudService{
         return "Issue or user does not exist.";
     }
 
+    @LoggingAnnotation("Added attachments")
     public String putAttachments(MultipartFile file, String user,  String issueTitle, String admin) {
         Optional<UserEntity> adminEntity = userRepository.findByUsername(admin);
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -65,6 +68,8 @@ public class CloudService{
         }
         return "User does not exist.";
     }
+
+    @LoggingAnnotation("Created cloud")
     private String createCloud(MultipartFile file){
         try {
             Cloudinary cloudinary = new Cloudinary(cloudUrl);
@@ -78,6 +83,7 @@ public class CloudService{
         }
     }
 
+    @LoggingAnnotation("Retrived attachments")
     public String getAttachments(String issueTitle, String user) {
         Optional<IssueEntity> issueEntity = issueRepository.findIssueEntitiesByTitle(issueTitle);
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -93,6 +99,7 @@ public class CloudService{
         return result.toString();
     }
 
+    @LoggingAnnotation("Retrived attachments")
     public String getAttachments(String issueTitle, String user, String admin) {
         Optional<IssueEntity> issueEntity = issueRepository.findIssueEntitiesByTitle(issueTitle);
         Optional<UserEntity> adminEntity = userRepository.findByUsername(admin);

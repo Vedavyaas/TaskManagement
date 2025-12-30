@@ -1,5 +1,6 @@
 package com.amdox.taskmanagement.Service;
 
+import com.amdox.taskmanagement.Aspect.LoggingAnnotation;
 import com.amdox.taskmanagement.Assests.Status;
 import com.amdox.taskmanagement.Assests.TaskDTO;
 import com.amdox.taskmanagement.Assests.TaskEnrollment;
@@ -21,6 +22,7 @@ public class TaskEnrollService {
         this.taskRepository = taskRepository;
     }
 
+    @LoggingAnnotation("Retrived tasks by username")
     public List<TaskDTO> getAllTasks(String admin, String username) {
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
@@ -34,6 +36,7 @@ public class TaskEnrollService {
         return null;
     }
 
+    @LoggingAnnotation("Retrived tasks")
     public List<TaskDTO> getAllTasks(String username) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
         if (userEntity.isPresent()) {
@@ -43,6 +46,7 @@ public class TaskEnrollService {
         return null;
     }
 
+    @LoggingAnnotation("Task created")
     public String createTask(TaskEnrollment taskEnrollment, String admin) {
         if (taskRepository.existsByTitle(taskEnrollment.title())) return "Title already exists";
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
@@ -60,6 +64,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @LoggingAnnotation("Task deleted")
     @Transactional
     public String deleteTask(String title, String admin) {
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
@@ -74,6 +79,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @LoggingAnnotation("Task description updated")
     @Transactional
     public String updateTaskDescription(String title, String description, String user) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -85,6 +91,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @LoggingAnnotation("Task description updated")
     @Transactional
     public String updateTaskDescription(String title, String description, String user, String admin) {
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
@@ -101,6 +108,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @LoggingAnnotation("Task status updated")
     @Transactional
     public String updateTaskStatus(String title, String status, String user) {
         if(!status.equals("ACTIVE") && !status.equals("COMPLETED")) return "Invalid status";
@@ -113,6 +121,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @LoggingAnnotation("Task status updated")
     @Transactional
     public String updateTaskStatus(String title, String status, String user, String admin) {
         if(!status.equals("ACTIVE") && !status.equals("COMPLETED")) return "Invalid status";
@@ -129,6 +138,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @LoggingAnnotation("Updated task due date")
     @Transactional
     public String updateDueDate(LocalDateTime dueDate, String title, String user) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(user);
@@ -140,6 +150,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @LoggingAnnotation("Updated task due date")
     @Transactional
     public String updateDueDate(LocalDateTime dueDate, String title, String user, String admin) {
         Optional<UserEntity> adminUser = userRepository.findByUsername(admin);
@@ -156,6 +167,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @LoggingAnnotation("Updated task priority")
     @Transactional
     public String updatePriority(String title, String priority, String user) {
         if(!priority.equals("ACTIVE") && !priority.equals("COMPLETED")) return "Invalid priority";
@@ -168,6 +180,7 @@ public class TaskEnrollService {
         return "User not found.";
     }
 
+    @LoggingAnnotation("Updated task priority")
     @Transactional
     public String updatePriority(String title, String priority, String user, String admin) {
         if(!priority.equals("HIGH") && !priority.equals("MEDIUM") && !priority.equals("LOW")) return "Invalid priority";

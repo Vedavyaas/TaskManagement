@@ -92,6 +92,12 @@ public class IssueController {
         return cloudService.getAttachments(issueTitle, user);
     }
 
+    @GetMapping("/issue/getAttachments/admin")
+    public String getIssueAttachments(@RequestParam String issueTitle, @RequestParam String user){
+        String admin = SecurityContextHolder.getContext().getAuthentication().getName();
+        return cloudService.getAttachments(issueTitle, user, admin);
+    }
+
     @PostMapping("/put/attachements")
     public String putIssueAttachments(@RequestParam MultipartFile file,  @RequestParam String issueTitle){
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -103,4 +109,5 @@ public class IssueController {
         String admin = SecurityContextHolder.getContext().getAuthentication().getName();
         return cloudService.putAttachments(file, user, issueTitle, admin);
     }
+
 }

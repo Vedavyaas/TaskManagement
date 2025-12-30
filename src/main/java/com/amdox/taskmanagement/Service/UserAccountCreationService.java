@@ -1,5 +1,6 @@
 package com.amdox.taskmanagement.Service;
 
+import com.amdox.taskmanagement.Aspect.LoggingAnnotation;
 import com.amdox.taskmanagement.Assests.NewAccount;
 import com.amdox.taskmanagement.Repository.UserEntity;
 import com.amdox.taskmanagement.Repository.UserRepository;
@@ -24,7 +25,7 @@ public class UserAccountCreationService {
         this.mailSenderService = mailSenderService;
     }
 
-
+    @LoggingAnnotation("Account created")
     public String createAccount(NewAccount newAccount, String OTP) {
         if (map.containsKey(newAccount.email())) {
             if (Objects.equals(map.get(newAccount.email()), Long.valueOf(OTP))) {
@@ -39,6 +40,7 @@ public class UserAccountCreationService {
         return "The provided OTP does not match.";
     }
 
+    @LoggingAnnotation("Account verified")
     public String verifyAccount(NewAccount newAccount) {
         if (userRepository.existsByEmail(newAccount.email())) return "An account with this email already exists.";
         else if (userRepository.existsByUsername(newAccount.username())) return "This username is already taken.";

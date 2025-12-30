@@ -1,5 +1,6 @@
 package com.amdox.taskmanagement.Service;
 
+import com.amdox.taskmanagement.Aspect.LoggingAnnotation;
 import com.amdox.taskmanagement.Repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class PasswordResetService {
         this.otpService = otpService;
     }
 
+    @LoggingAnnotation("Password reset - OTP generation")
     public String generateOTP(String email) {
         if (userRepository.existsByEmail(email)) {
             var OTP = otpService.createOTP();
@@ -33,7 +35,7 @@ public class PasswordResetService {
         return "No account found with this email address.";
     }
 
-
+    @LoggingAnnotation("Password reset")
     public String resetPassword(String email, String password) {
         if (userRepository.existsByEmail(email)) {
             userRepository.findByEmail(email).ifPresent(user -> {
@@ -46,6 +48,7 @@ public class PasswordResetService {
         return "No account found with this email address.";
     }
 
+    @LoggingAnnotation("Password reset - OTP verification")
     public boolean verifyOTP(String email, long otp) {
         if (userRepository.existsByEmail(email)) {
             return otpService.verifyOTP(email, otp);
