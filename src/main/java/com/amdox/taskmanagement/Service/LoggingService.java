@@ -18,15 +18,6 @@ public class LoggingService {
         this.loggingRepository = loggingRepository;
     }
 
-    public LoggingEntity saveLog(String username, String organization, String message) {
-        LoggingEntity log = new LoggingEntity(username, organization, message);
-        return loggingRepository.save(log);
-    }
-
-    public LoggingEntity saveLog(LoggingEntity log) {
-        return loggingRepository.save(log);
-    }
-
     public List<LoggingEntity> getAllLogs() {
         return loggingRepository.findAllOrderByTimestampDesc();
     }
@@ -62,12 +53,5 @@ public class LoggingService {
     public long getLogCount() {
         return loggingRepository.count();
     }
-
-    public long getLogCountByUsername(String username) {
-        return loggingRepository.findByUsername(username).size();
-    }
-
-    public long getLogCountByOrganization(String organization) {
-        return loggingRepository.findByOrganization(organization).size();
-    }
 }
+

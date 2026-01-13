@@ -69,22 +69,9 @@ public class LoggingController {
     }
 
     @GetMapping("/count")
-    public ResponseEntity<Map<String, Long>> getLogCount(
-            @RequestParam(required = false) String username,
-            @RequestParam(required = false) String organization) {
-
+    public ResponseEntity<Map<String, Long>> getLogCount() {
         Map<String, Long> countMap = new HashMap<>();
-
-        if (username != null) {
-            countMap.put("totalLogs", loggingService.getLogCount());
-            countMap.put("userLogs", loggingService.getLogCountByUsername(username));
-        } else if (organization != null) {
-            countMap.put("totalLogs", loggingService.getLogCount());
-            countMap.put("organizationLogs", loggingService.getLogCountByOrganization(organization));
-        } else {
-            countMap.put("totalLogs", loggingService.getLogCount());
-        }
-
+        countMap.put("totalLogs", loggingService.getLogCount());
         return ResponseEntity.ok(countMap);
     }
 
@@ -96,14 +83,5 @@ public class LoggingController {
         response.put("deletedBefore", beforeDate.toString());
         return ResponseEntity.ok(response);
     }
-
-    @DeleteMapping("/all")
-    public ResponseEntity<Map<String, String>> deleteAllLogs() {
-        List<LoggingEntity> allLogs = loggingService.getAllLogs();
-        loggingService.deleteOldLogs(LocalDateTime.now().plusYears(1));
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "All logs cleared");
-        response.put("deletedCount", String.valueOf(allLogs.size()));
-        return ResponseEntity.ok(response);
-    }
 }
+
