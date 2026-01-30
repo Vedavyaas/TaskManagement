@@ -1,23 +1,30 @@
 package com.amdox.taskmanagement.Controller;
 
+import com.amdox.taskmanagement.Enum.NotificationEvent;
 import com.amdox.taskmanagement.Service.NotificationService;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
+@RequestMapping("/api/notifications")
 public class NotificationController {
 
-    private final NotificationService notificationService;
+    @Autowired
+    private NotificationService notificationService;
 
-    public NotificationController(NotificationService notificationService) {
-        this.notificationService = notificationService;
-    }
+    @PostMapping("/notify")
+    public ResponseEntity<String> sendNotification(@RequestParam Long projectId,
+                                                   @RequestParam NotificationEvent eventType,
+                                                   @RequestParam Long entityId,
+                                                   @RequestParam Set<String> emails,
+                                                   @RequestParam String subject,
+                                                   @RequestParam String message) {
 
-    @PostMapping("/post/notification")
-    public String postNotification(@RequestParam String to, @RequestParam String message) {
-        String user = SecurityContextHolder.getContext().getAuthentication().getName();
-        return notificationService.postMessage(user, to, message);
+        notificationService.notify(projectId, eventType, emails, subject, message, entityId);
+
+        return ResponseEntity.ok("Notification sent successful");
     }
 }

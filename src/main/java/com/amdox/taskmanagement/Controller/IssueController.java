@@ -1,113 +1,61 @@
 package com.amdox.taskmanagement.Controller;
 
-import com.amdox.taskmanagement.Assests.IssueDTO;
-import com.amdox.taskmanagement.Assests.IssueEnrollment;
-import com.amdox.taskmanagement.Service.CloudService;
+import com.amdox.taskmanagement.Entity.Issue;
+import com.amdox.taskmanagement.Entity.IssueComment;
 import com.amdox.taskmanagement.Service.IssueService;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/issues")
 public class IssueController {
 
-    private final IssueService issueService;
+    @Autowired
+    private IssueService issueService;
 
-    private final CloudService cloudService;
-
-    public IssueController(IssueService issueService, CloudService cloudService) {
-        this.issueService = issueService;
-        this.cloudService = cloudService;
+    @PostMapping("/create")
+    public ResponseEntity<Issue> createIssue(@RequestBody Issue issue) {
+        return ResponseEntity.ok(issueService.createIssue(issue));
     }
 
-    @GetMapping("/get/issueToken")
-    public String getIssueToken(@RequestParam String title){
-        return  issueService.getIssueTokenByTitle(title);
+    @GetMapping
+    public ResponseEntity<List<Issue>> getAllIssues() {
+        return ResponseEntity.ok(issueService.getAllIssues());
     }
 
-    @GetMapping("/issue/get")
-    public List<IssueDTO> getIssueOfAnotherUser(@RequestParam String username){
-        String admin = SecurityContextHolder.getContext().getAuthentication().getName();
-        return issueService.getIssuesByUserName(username, admin);
+    @GetMapping("/{id}")
+    public ResponseEntity<Issue> getIssue(@PathVariable Long id) {
+        return ResponseEntity.ok(issueService.getIssueById(id));
+    }
+    
+    @GetMapping("/key/{key}")
+    public ResponseEntity<Issue> getIssueByKey(@PathVariable String key) {
+        return ResponseEntity.ok(issueService.getIssueByKey(key));
     }
 
-    @GetMapping("/issue/get/self")
-    public List<IssueDTO> getIssueOfUser(){
-        String admin = SecurityContextHolder.getContext().getAuthentication().getName();
-        return issueService.getIssuesByUserName(admin);
-    }
-    @PostMapping("/issue/create")
-    public String createIssue(@RequestBody IssueEnrollment issueEnrollment){
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return issueService.createIssue(issueEnrollment, userName);
+    @PutMapping("/{id}")
+    public ResponseEntity<Issue> updateIssue(@PathVariable Long id, @RequestBody Issue issue) {
+        return ResponseEntity.ok(issueService.updateIssue(id, issue));
     }
 
-    @DeleteMapping("/issue/close")
-    public String deleteIssue(@RequestParam String issueToken){
-        String admin = SecurityContextHolder.getContext().getAuthentication().getName();
-        return issueService.closeIssue(issueToken, admin);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteIssue(@PathVariable Long id) {
+        issueService.deleteIssue(id);
+        return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/issue/update/description")
-    public String updateIssueDescription(@RequestParam String description, @RequestParam String issueToken){
-        String user = SecurityContextHolder.getContext().getAuthentication().getName();
-        return issueService.updateIssueByDescription(description, issueToken, user);
+    @PostMapping("/{id}/comments")
+    public ResponseEntity<IssueComment> addComment(@PathVariable Long id, 
+                                                   @RequestParam String authorEmail, 
+                                                   @RequestBody String body) {
+        return ResponseEntity.ok(issueService.addComment(id, authorEmail, body));
     }
 
-    @PutMapping("/issue/update/description/other")
-    public String updateIssueDescription(@RequestParam String description, @RequestParam String issueToken, @RequestParam String user){
-        String admin = SecurityContextHolder.getContext().getAuthentication().getName();
-        return issueService.updateIssueByDescription(description, issueToken, user, admin);
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<List<IssueComment>> getComments(@PathVariable Long id) {
+        return ResponseEntity.ok(issueService.getComments(id));
     }
-
-    @PutMapping("/issue/update/comment")
-    public String updateIssueComment(@RequestParam String comment, @RequestParam String issueToken){
-        String user = SecurityContextHolder.getContext().getAuthentication().getName();
-        return issueService.updateIssueByComment(comment, issueToken, user);
-    }
-
-    @PutMapping("/issue/update/comment/other")
-    public String updateIssueComment(@RequestParam String comment, @RequestParam String issueToken, @RequestParam String user){
-        String admin = SecurityContextHolder.getContext().getAuthentication().getName();
-        return issueService.updateIssueByComment(comment, issueToken, user, admin);
-    }
-
-    @PutMapping("/issue/update/status")
-    public String updateIssueStatus(@RequestParam String status, @RequestParam String issueToken){
-        String user = SecurityContextHolder.getContext().getAuthentication().getName();
-        return issueService.updateIssueByStatus(status, issueToken, user);
-    }
-
-    @PutMapping("/issue/update/status/other")
-    public String updateIssueStatus(@RequestParam String status, @RequestParam String issueToken, @RequestParam String user){
-        String admin = SecurityContextHolder.getContext().getAuthentication().getName();
-        return issueService.updateIssueByStatus(status, issueToken, user, admin);
-    }
-
-    @GetMapping("/issue/getAttachments")
-    public String getIssueAttachments(@RequestParam String issueTitle){
-        String user = SecurityContextHolder.getContext().getAuthentication().getName();
-        return cloudService.getAttachments(issueTitle, user);
-    }
-
-    @GetMapping("/issue/getAttachments/admin")
-    public String getIssueAttachments(@RequestParam String issueTitle, @RequestParam String user){
-        String admin = SecurityContextHolder.getContext().getAuthentication().getName();
-        return cloudService.getAttachments(issueTitle, user, admin);
-    }
-
-    @PostMapping("/put/attachements")
-    public String putIssueAttachments(@RequestParam MultipartFile file,  @RequestParam String issueTitle){
-        String user = SecurityContextHolder.getContext().getAuthentication().getName();
-        return cloudService.putAttachments(file, user, issueTitle);
-    }
-
-    @PostMapping("/put/attachments/other")
-    public String putIssueAttachments(@RequestParam MultipartFile file, @RequestParam String issueTitle, @RequestParam String user){
-        String admin = SecurityContextHolder.getContext().getAuthentication().getName();
-        return cloudService.putAttachments(file, user, issueTitle, admin);
-    }
-
 }

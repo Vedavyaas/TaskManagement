@@ -37,14 +37,16 @@ public class UserAccountCreationService {
                 return "Account created successfully.";
             }
         }
-        return "The provided OTP does not match.";
+        throw new RuntimeException("The provided OTP does not match or has expired.");
     }
 
     @LoggingAnnotation("Account verified")
     public String verifyAccount(NewAccount newAccount) {
-        if (userRepository.existsByEmail(newAccount.email())) return "An account with this email already exists.";
-        else if (userRepository.existsByUsername(newAccount.username())) return "This username is already taken.";
-        else {
+        if (userRepository.existsByEmail(newAccount.email())) {
+            throw new RuntimeException("An account with this email already exists.");
+        } else if (userRepository.existsByUsername(newAccount.username())) {
+            throw new RuntimeException("This username is already taken.");
+        } else {
             Random random = new Random();
             long OTP = 100000 + random.nextInt(900000);
             map.put(newAccount.email(), OTP);

@@ -1,0 +1,103 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------------< com.Amdox:TaskManagement >----------------------
+[INFO] Building TaskManagement 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.5.7:run (default-cli) > test-compile @ TaskManagement >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ TaskManagement ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ TaskManagement ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 103 source files with javac [debug parameters release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ TaskManagement ---
+[INFO] skip non existing resourceDirectory /Users/vedavyaasmr/IdeaProjects/TaskManagement/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ TaskManagement ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug parameters release 17] to target/test-classes
+[INFO] 
+[INFO] <<< spring-boot:3.5.7:run (default-cli) < test-compile @ TaskManagement <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.5.7:run (default-cli) @ TaskManagement ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.7)
+
+2026-01-30T21:20:43.846+05:30  INFO 3901 --- [TaskManagement] [           main] c.a.t.TaskManagementApplication          : Starting TaskManagementApplication using Java 25.0.1 with PID 3901 (/Users/vedavyaasmr/IdeaProjects/TaskManagement/target/classes started by vedavyaasmr in /Users/vedavyaasmr/IdeaProjects/TaskManagement)
+2026-01-30T21:20:43.847+05:30  INFO 3901 --- [TaskManagement] [           main] c.a.t.TaskManagementApplication          : No active profile set, falling back to 1 default profile: "default"
+2026-01-30T21:20:44.020+05:30  INFO 3901 --- [TaskManagement] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-01-30T21:20:44.047+05:30  INFO 3901 --- [TaskManagement] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25 ms. Found 16 JPA repository interfaces.
+2026-01-30T21:20:44.229+05:30  INFO 3901 --- [TaskManagement] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (http)
+2026-01-30T21:20:44.233+05:30  INFO 3901 --- [TaskManagement] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-30T21:20:44.233+05:30  INFO 3901 --- [TaskManagement] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2026-01-30T21:20:44.245+05:30  INFO 3901 --- [TaskManagement] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-30T21:20:44.245+05:30  INFO 3901 --- [TaskManagement] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 384 ms
+2026-01-30T21:20:44.303+05:30  INFO 3901 --- [TaskManagement] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-01-30T21:20:44.317+05:30  INFO 3901 --- [TaskManagement] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.33.Final
+2026-01-30T21:20:44.325+05:30  INFO 3901 --- [TaskManagement] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-01-30T21:20:44.404+05:30  INFO 3901 --- [TaskManagement] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-01-30T21:20:44.412+05:30  INFO 3901 --- [TaskManagement] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-30T21:20:44.457+05:30  INFO 3901 --- [TaskManagement] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:user user=USER
+2026-01-30T21:20:44.458+05:30  INFO 3901 --- [TaskManagement] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-01-30T21:20:44.465+05:30  WARN 3901 --- [TaskManagement] [           main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-01-30T21:20:44.470+05:30  INFO 3901 --- [TaskManagement] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-01-30T21:20:44.803+05:30  INFO 3901 --- [TaskManagement] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-30T21:20:44.828+05:30  INFO 3901 --- [TaskManagement] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-01-30T21:20:44.901+05:30  INFO 3901 --- [TaskManagement] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-01-30T21:20:45.111+05:30  WARN 3901 --- [TaskManagement] [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'JWTAuthenticationController' defined in file [/Users/vedavyaasmr/IdeaProjects/TaskManagement/target/classes/com/amdox/taskmanagement/Controller/JWTAuthenticationController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'org.springframework.security.oauth2.jwt.JwtEncoder' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2026-01-30T21:20:45.111+05:30  INFO 3901 --- [TaskManagement] [           main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-01-30T21:20:45.115+05:30  INFO 3901 --- [TaskManagement] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-01-30T21:20:45.116+05:30  INFO 3901 --- [TaskManagement] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-01-30T21:20:45.117+05:30  INFO 3901 --- [TaskManagement] [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-01-30T21:20:45.120+05:30  INFO 3901 --- [TaskManagement] [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-01-30T21:20:45.127+05:30 ERROR 3901 --- [TaskManagement] [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.amdox.taskmanagement.Controller.JWTAuthenticationController required a bean of type 'org.springframework.security.oauth2.jwt.JwtEncoder' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'org.springframework.security.oauth2.jwt.JwtEncoder' in your configuration.
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.628 s
+[INFO] Finished at: 2026-01-30T21:20:45+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.5.7:run (default-cli) on project TaskManagement: Process terminated with exit code: 1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

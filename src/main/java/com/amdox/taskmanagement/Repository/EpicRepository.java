@@ -1,9 +1,9 @@
 package com.amdox.taskmanagement.Repository;
 
-import com.amdox.taskmanagement.Entity.Notification;
+import com.amdox.taskmanagement.Entity.Epic;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface NotificationRepository extends JpaRepository<Notification, Long> {
+public interface EpicRepository extends JpaRepository<Epic, Long> {
 }
